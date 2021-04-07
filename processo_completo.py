@@ -1,6 +1,7 @@
 
 from procedimentoT2FTS.pyT2FTS import Type2Model,IT2FS_plot
-from procedimentoT2FTS.ferramentas import conjuntos_soda,conjuntos_adp,metricas_erro,plotar_previsao  #biblioteca com funcoes uteis para sistema fuzzy
+from procedimentoT2FTS.ferramentas import metricas_erro,plotar_previsao  #biblioteca com funcoes uteis para sistema fuzzy
+from procedimentoT2FTS.ferramentas import conjuntos_soda,conjuntos_adp,conjuntos_dbscan
 from pyFTS.common import Transformations
 import numpy as np
 
@@ -47,12 +48,19 @@ def T2FTS(data,metodo_part,numero_de_sets,order=1,diff=1):
 
     if metodo_part == 'chen':
         modelo.chen_model_sobreposto(numero_de_sets)
+        
     elif metodo_part == 'soda':
         numero_de_sets = conjuntos_soda(treino,numero_de_sets)
-        modelo.chen_model_sobreposto(numero_de_sets)       
+        modelo.chen_model_sobreposto(numero_de_sets)   
+        
     elif metodo_part == 'ADP':
         numero_de_sets = conjuntos_adp(treino, numero_de_sets)
         modelo.chen_model_sobreposto(numero_de_sets)
+        
+    elif metodo_part == 'DBSCAN':
+        numero_de_sets = conjuntos_dbscan(treino, numero_de_sets)
+        modelo.chen_model_sobreposto(numero_de_sets)
+        
     else:
         raise Exception("Method %s not implemented" % metodo_part)
         

@@ -40,7 +40,51 @@ def conjuntos_soda(data,gridsize):
                          
     return numero_de_sets
     
+ 
+def conjuntos_adp(data,gridsize, distancetype='chebyshev'):
+    'A distancia pode ser chebyshev, euclidean, cityblock, sqeuclidean ou cosine'
+	
+    """Retorna apenas o numero de conjuntos encontrado pelo ADP"""
     
+    print("Gridsize: {}".format(gridsize))
+    
+    #from procedimentoT2FTS.OfflineADP import ADP 
+    from OfflineADP import ADP 
+    
+	#Make it a two-column dataframe       
+    dados = pd.DataFrame(data, columns = ['avg'])
+    dados.insert(0, '#', range(1,len(dados)+1))
+    
+    centre, idx = ADP(dados,gridsize)           
+    
+    'Define o numero de sets'
+    numero_de_sets = len(centre)
+                         
+    return numero_de_sets
+
+
+def conjuntos_dbscan(data,gridsize, distancetype='chebyshev'):
+    'A distancia pode ser chebyshev, euclidean, cityblock, sqeuclidean ou cosine'
+	
+    """Retorna apenas o numero de conjuntos encontrado pelo ADP"""
+    
+    print("Gridsize: {}".format(gridsize))
+    
+    #from procedimentoT2FTS.OfflineADP import ADP 
+    from OfflineADP import ADP 
+    
+	#Make it a two-column dataframe       
+    dados = pd.DataFrame(data, columns = ['avg'])
+    dados.insert(0, '#', range(1,len(dados)+1))
+    
+    centre, idx = ADP(dados,gridsize)           
+    
+    'Define o numero de sets'
+    numero_de_sets = len(centre)
+                         
+    return numero_de_sets
+
+
 
 
 
@@ -174,26 +218,7 @@ def conjuntos_soda_definindo_tamanho_dos_sets(self,data,data_original,gridsize):
 
 
 
-def conjuntos_adp(data,gridsize, distancetype='chebyshev'):
-    'A distancia pode ser chebyshev, euclidean, cityblock, sqeuclidean ou cosine'
-	
-    """Retorna apenas o numero de conjuntos encontrado pelo ADP"""
-    
-    print("Gridsize: {}".format(gridsize))
-    
-    #from procedimentoT2FTS.OfflineADP import ADP 
-    from OfflineADP import ADP 
-    
-	#Make it a two-column dataframe       
-    dados = pd.DataFrame(data, columns = ['avg'])
-    dados.insert(0, '#', range(1,len(dados)+1))
-    
-    centre, idx = ADP(dados,gridsize)           
-    
-    'Define o numero de sets'
-    numero_de_sets = len(centre)
-                         
-    return numero_de_sets
+
 
 
     

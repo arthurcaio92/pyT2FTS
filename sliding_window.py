@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from procedimentoT2FTS.processo_completo import T2FTS
 import pickle #To save the data as the process goes
+import time
 
     
 def janela_deslizante(data,diff,particoes,ordens,metodo_part):
@@ -26,10 +27,15 @@ def janela_deslizante(data,diff,particoes,ordens,metodo_part):
 
     """
     
+    'Let''s measure the total elapsed time for the whole process to be completed'
+    start_time = time.time()
+    
+    
+    
     'Indicates the percentage of the windowsize to move the window'
     increment = 0.2  
 
-    'lista para salvar os erros'
+    'list to sabe the errors'
     lista_rmse = []
     lista_particoes = []
     lista_regras = []
@@ -58,17 +64,18 @@ def janela_deslizante(data,diff,particoes,ordens,metodo_part):
                         'mean_RMSE': [],
                         'std_RMSE': [],
                         'FLR':[],
-                        'FLRG':[]
+                        'FLRG':[],
+                        'Time(s)': [],
+                        'Total Time(s)': []
                         
                          }  
     
     
-    '-----Começa o Gridsearch------'
+    '-----Begins the Gridsearch------'
     
     for numero in particoes:
         
         gridsize = numero
-        #erros_especifico['Gridsize'].append(gridsize)                
         
         for lag in ordens:
         
@@ -79,6 +86,10 @@ def janela_deslizante(data,diff,particoes,ordens,metodo_part):
             
             janela_inf = 0
             janela_sup = tamanho_janela
+            
+            'Let''s measure the METHOD elapsed time '
+            method_start_time = time.time()
+            
             
             while (janela_sup <= len(data)):
                 
@@ -129,6 +140,12 @@ def janela_deslizante(data,diff,particoes,ordens,metodo_part):
                 
                 #janela_inf = int(janela_inf + tamanho_janela * increment)
                 #janela_sup = int(janela_sup + tamanho_janela * increment)
+                
+            
+            'Ends time measurement'
+            method_end_time = time.time()
+            
+            method_elapsed_time = method_end_time - method_start_time
             
             'Calcula a media e desvio padrao de RMSE de todas as instancias da janela para a ordem e partição do momento'
            
@@ -202,6 +219,8 @@ def janela_deslizante(data,diff,particoes,ordens,metodo_part):
             erros_especifico['FLRG'].append(avg_flrg)  
             erros_especifico['mean_RMSE'].append(avg_rmse)
             erros_especifico['std_RMSE'].append(std_rmse)
+            erros_especifico['Time(s)'].append(method_elapsed_time)
+            erros_especifico['Total Time(s)'].append(None)
 
 
             'Printa na tela o resultado das janelas'
@@ -223,13 +242,27 @@ def janela_deslizante(data,diff,particoes,ordens,metodo_part):
             pickle.dump(erros_especifico, pickle_out)         
             pickle_out.close()
         
-            lista_rmse = []  #reseta a lista
+            'Resets the lists'
+            lista_rmse = []  
             lista_regras = []
             lista_flrg = []
             lista_particoes = []
             
     
-   
+    'Ends time measurement'
+    end_time = time.time()      
+    total_elapsed_time = end_time - start_time
+    
+    'Adds the final line with the total elapsed time'
+    erros_especifico['Gridsize'].append(None)   
+    erros_especifico['Ordem'].append(None)         
+    erros_especifico['Particoes'].append(None) 
+    erros_especifico['FLR'].append(None)  
+    erros_especifico['FLRG'].append(None)  
+    erros_especifico['mean_RMSE'].append(None)
+    erros_especifico['std_RMSE'].append(None)
+    erros_especifico['Time(s)'].append('Total Elapsed Time:')
+    erros_especifico['Total Time(s)'].append(total_elapsed_time)
                
     
     '------------------------------------------------  Salva metricas em Excel  ------------------------------------------'
@@ -262,7 +295,7 @@ def janela_deslizante(data,diff,particoes,ordens,metodo_part):
     
     
  
-    return df_geral,df_especifico
+    return df_geral,df_especifico,total_elapsed_time
         
         
 
@@ -461,7 +494,7 @@ def comparison_sliding_window(datasets,dataset_names,diff,particoes,ordens,metod
                 pickle.dump(erros_especifico, pickle_out)         
                 pickle_out.close()
             
-                lista_rmse = []  #reseta a lista
+                lista_rmse = []  #resets the list
                 
         comparacao[data_name] = erros_especifico
         

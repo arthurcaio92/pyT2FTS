@@ -8,6 +8,14 @@ from itertools import product
 from numpy import linspace
 import numpy as np
 
+
+"""
+Built thanks to Haghrah's PyIT2FLS
+Reference:
+Haghrah, Amir Arslan, and Sehraneh Ghaemi. "PyIT2FLS: A New Python Toolkit for Interval Type 2 Fuzzy Logic Systems." arXiv preprint arXiv:1909.10051 (2019).
+
+"""
+
 """
 
 OBS: Se der erro float division by zero

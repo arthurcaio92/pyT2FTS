@@ -293,7 +293,7 @@ def janela_deslizante(data,diff,particoes,ordens,metodo_part):
     
     
  
-    return df_geral,df_especifico,total_elapsed_time
+    return df_geral,df_especifico
         
         
 

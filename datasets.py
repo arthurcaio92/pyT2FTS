@@ -33,9 +33,9 @@ def get_TAIEX():
 
     :return: Pandas DataFrame
     """
-    dat = get_dataframe('TAIEX.csv.bz2',
-                               'https://github.com/arthurcaio92/pyT2FTS/raw/main/data/TAIEX.bz2',
-                               sep=",", compression='bz2')
+    dat = get_dataframe('TAIEX.csv.zip',
+                               'https://github.com/arthurcaio92/pyT2FTS/raw/main/data/TAIEX.zip',
+                               sep=",", compression='zip')
     dat["Date"] = pd.to_datetime(dat["Date"])
     return dat
 
@@ -46,9 +46,9 @@ def get_NASDAQ():
 
     :return: Pandas DataFrame
     """
-    dat = get_dataframe('TAIEX.csv.bz2',
-                               'https://github.com/arthurcaio92/pyT2FTS/raw/main/data/NASDAQ.bz2',
-                               sep=",", compression='bz2')
+    dat = get_dataframe('TAIEX.csv.zip',
+                               'https://github.com/arthurcaio92/pyT2FTS/raw/main/data/NASDAQ.zip',
+                               sep=",", compression='zip')
     dat["Date"] = pd.to_datetime(dat["Date"])
     return dat
 
@@ -59,9 +59,9 @@ def get_SP500():
 
     :return: Pandas DataFrame
     """
-    dat = get_dataframe('TAIEX.csv.bz2',
-                               'https://github.com/arthurcaio92/pyT2FTS/raw/main/data/SP500.bz2',
-                               sep=",", compression='bz2')
+    dat = get_dataframe('TAIEX.csv.zip',
+                               'https://github.com/arthurcaio92/pyT2FTS/raw/main/data/SP500.zip',
+                               sep=",", compression='zip')
     dat["Date"] = pd.to_datetime(dat["Date"])
     return dat
 

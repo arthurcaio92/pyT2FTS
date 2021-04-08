@@ -9,8 +9,8 @@ import pandas as pd
 #from pandas import Dataframe
 import matplotlib.pyplot as plt
 from numpy import linspace
-from pyT2FTS.pyT2FTS import FuzzySet, tri_mf, IT2FS_plot, min_t_norm, max_s_norm, TR_plot, crisp
-from pyT2FTS.pyT2FTS import Type2Model
+from pyT2FTS.T2FTS import FuzzySet, tri_mf, IT2FS_plot, min_t_norm, max_s_norm, TR_plot, crisp
+from pyT2FTS.T2FTS import Type2Model
 
 from sklearn.metrics import mean_absolute_error
 from sklearn.metrics import mean_squared_error

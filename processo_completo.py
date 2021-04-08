@@ -1,8 +1,8 @@
 
-from pyT2FTS.pyT2FTS import Type2Model,IT2FS_plot
+from pyT2FTS.T2FTS import Type2Model,IT2FS_plot
 from pyT2FTS.ferramentas import metricas_erro,plotar_previsao  #biblioteca com funcoes uteis para sistema fuzzy
 from pyT2FTS.ferramentas import conjuntos_soda,conjuntos_adp,conjuntos_dbscan
-from pyFTS.common import Transformations
+from pyT2FTS.Transformations import Differential
 import numpy as np
 
 
@@ -34,7 +34,7 @@ def T2FTS(data,metodo_part,numero_de_sets,order=1,diff=1):
         treino_orig = treino
         teste_orig = teste
     
-        tdiff = Transformations.Differential(1) 
+        tdiff = Differential(1) 
         treino = tdiff.apply(treino_orig)
         teste = tdiff.apply(teste_orig)
     

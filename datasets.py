@@ -6,26 +6,67 @@ import pickle #To save the data as the process goes
  
 
 
+import os
+import pkg_resources
+from pathlib import Path
+from urllib import request
+
+
+def get_dataframe(filename, url, sep=";", compression='infer'):
+    """
+    This method check if filename already exists, read the file and return its data.
+    If the file don't already exists, it will be downloaded and decompressed.
+
+    :param filename: dataset local filename
+    :param url: dataset internet URL
+    :param sep: CSV field separator
+    :param compression: type of compression
+    :return:  Pandas dataset
+    """
+
+    tmp_file = Path(filename)
+
+    if tmp_file.is_file():
+        return pd.read_csv(filename, sep=sep, compression=compression)
+    else:
+        request.urlretrieve(url, filename)
+        return pd.read_csv(filename, sep=sep, compression=compression)
+
+
+
+def get_TAIEX():
+    """
+    Get the complete multivariate time series data.
+
+    :return: Pandas DataFrame
+    """
+    dat = get_dataframe('TAIEX.csv',
+                               'https://raw.githubusercontent.com/arthurcaio92/pyT2FTS/main/TAIEX.csv',
+                               sep=",", compression='bz2')
+    dat["Date"] = pd.to_datetime(dat["Date"])
+    return dat
+
+
 def get_NASDAQ():
     
     """
     Returns an array containing the NASDAQ time series
     """
     
-    df = pd.read_csv("C:/Users/arthu/Anaconda3/Lib/site-packages/procedimentoT2FTS/NASDAQ.csv")
+    df = pd.read_csv("C:/Users/arthu/Anaconda3/Lib/site-packages/pyT2FTS/NASDAQ.csv")
     df.dropna()
     nasdaq = df.avg               # Pega somente a última coluna de dados: a média (avg)
     nasdaq = nasdaq.to_numpy()      # Covnerte de panda dataframe para array numpy
     
     return nasdaq
 
-def get_TAIEX():
+def gssset_TAIEX():
     
     """
     Returns an array containing the TAIEX time series
     """
     
-    df = pd.read_csv("C:/Users/arthu/Anaconda3/Lib/site-packages/procedimentoT2FTS/TAIEX.csv")
+    df = pd.read_csv("C:/Users/arthu/Anaconda3/Lib/site-packages/pyT2FTS/TAIEX.csv")
     df.dropna()
     taiex = df.avg               # Pega somente a última coluna de dados: a média (avg)
     taiex = taiex.to_numpy()      # Covnerte de panda dataframe para array numpy

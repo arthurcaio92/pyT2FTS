@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from procedimentoT2FTS.processo_completo import T2FTS
+from pyT2FTS.processo_completo import T2FTS
 import pickle #To save the data as the process goes
 
  

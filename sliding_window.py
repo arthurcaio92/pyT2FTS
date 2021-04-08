@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from procedimentoT2FTS.processo_completo import T2FTS
+from pyT2FTS.processo_completo import T2FTS
 import pickle #To save the data as the process goes
 import time
 
@@ -277,9 +277,7 @@ def janela_deslizante(data,diff,particoes,ordens,metodo_part):
     
     print("Arquivo salvo:",nome_arquivo)
     writer = pd.ExcelWriter(nome_arquivo, engine='xlsxwriter')
-    
-    print(erros_especifico)
-        
+            
     df_geral = pd.DataFrame(data=erros_geral)
     df_especifico = pd.DataFrame(data=erros_especifico)
     #df_especifico.columns = ['Gridsize','Particoes','RMSE medio 1_Ordem', 'Desvio padrao RMSE 1_Ordem','RMSE medio 2_Ordem', 'Desvio padrao RMSE 2_Ordem','RMSE medio 3_Ordem', 'Desvio padrao RMSE 3_Ordem','FLR','FLRG']    

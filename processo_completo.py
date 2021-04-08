@@ -1,7 +1,7 @@
 
-from procedimentoT2FTS.pyT2FTS import Type2Model,IT2FS_plot
-from procedimentoT2FTS.ferramentas import metricas_erro,plotar_previsao  #biblioteca com funcoes uteis para sistema fuzzy
-from procedimentoT2FTS.ferramentas import conjuntos_soda,conjuntos_adp,conjuntos_dbscan
+from pyT2FTS.pyT2FTS import Type2Model,IT2FS_plot
+from pyT2FTS.ferramentas import metricas_erro,plotar_previsao  #biblioteca com funcoes uteis para sistema fuzzy
+from pyT2FTS.ferramentas import conjuntos_soda,conjuntos_adp,conjuntos_dbscan
 from pyFTS.common import Transformations
 import numpy as np
 

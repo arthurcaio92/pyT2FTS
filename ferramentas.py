@@ -9,8 +9,8 @@ import pandas as pd
 #from pandas import Dataframe
 import matplotlib.pyplot as plt
 from numpy import linspace
-from procedimentoT2FTS.pyT2FTS import FuzzySet, tri_mf, IT2FS_plot, min_t_norm, max_s_norm, TR_plot, crisp
-from procedimentoT2FTS.pyT2FTS import Type2Model
+from pyT2FTS.pyT2FTS import FuzzySet, tri_mf, IT2FS_plot, min_t_norm, max_s_norm, TR_plot, crisp
+from pyT2FTS.pyT2FTS import Type2Model
 
 from sklearn.metrics import mean_absolute_error
 from sklearn.metrics import mean_squared_error
@@ -27,7 +27,7 @@ def conjuntos_soda(data,gridsize):
     
     print("Gridsize:",gridsize )
     
-    from procedimentoT2FTS.SODA import SODA_function 
+    from pyT2FTS.SODA import SODA_function 
     
     soda_idx = SODA_function(data,gridsize)
                 
@@ -48,7 +48,7 @@ def conjuntos_adp(data,gridsize, distancetype='chebyshev'):
     
     print("Gridsize: {}".format(gridsize))
     
-    #from procedimentoT2FTS.OfflineADP import ADP 
+    #from pyT2FTS.OfflineADP import ADP 
     from OfflineADP import ADP 
     
 	#Make it a two-column dataframe       
@@ -70,7 +70,7 @@ def conjuntos_dbscan(data,gridsize, distancetype='chebyshev'):
     
     print("Gridsize: {}".format(gridsize))
     
-    #from procedimentoT2FTS.OfflineADP import ADP 
+    #from pyT2FTS.OfflineADP import ADP 
     from OfflineADP import ADP 
     
 	#Make it a two-column dataframe       
@@ -133,7 +133,7 @@ def conjuntos_soda_definindo_tamanho_dos_sets(self,data,data_original,gridsize):
     
     print("Gridsize:",gridsize )
     
-    from procedimentoT2FTS.SODA import SODA_function 
+    from pyT2FTS.SODA import SODA_function 
     
     soda_idx = SODA_function(data_original,gridsize)
             

@@ -10,7 +10,7 @@ from sklearn.preprocessing import StandardScaler
 
 
 import pandas as pd
-from procedimentoT2FTS.sliding_window import janela_deslizante
+from pyT2FTS.sliding_window import janela_deslizante
 import numpy as np
 import matplotlib.pyplot as plt
 '------------------------------------------------ Importação da base de dados -------------------------------------------------'

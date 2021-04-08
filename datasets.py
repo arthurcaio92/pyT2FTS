@@ -1,15 +1,8 @@
 import pandas as pd
 import numpy as np
-from pyT2FTS.processo_completo import T2FTS
-import pickle #To save the data as the process goes
-
- 
-
-
-import os
-import pkg_resources
 from pathlib import Path
 from urllib import request
+
 
 
 def get_dataframe(filename, url, sep=";", compression='infer'):
@@ -40,38 +33,39 @@ def get_TAIEX():
 
     :return: Pandas DataFrame
     """
-    dat = get_dataframe('TAIEX.csv',
-                               'https://raw.githubusercontent.com/arthurcaio92/pyT2FTS/main/TAIEX.csv',
+    dat = get_dataframe('TAIEX.csv.bz2',
+                               'https://github.com/arthurcaio92/pyT2FTS/raw/main/data/TAIEX.bz2',
                                sep=",", compression='bz2')
     dat["Date"] = pd.to_datetime(dat["Date"])
     return dat
 
 
 def get_NASDAQ():
-    
     """
-    Returns an array containing the NASDAQ time series
-    """
-    
-    df = pd.read_csv("C:/Users/arthu/Anaconda3/Lib/site-packages/pyT2FTS/NASDAQ.csv")
-    df.dropna()
-    nasdaq = df.avg               # Pega somente a última coluna de dados: a média (avg)
-    nasdaq = nasdaq.to_numpy()      # Covnerte de panda dataframe para array numpy
-    
-    return nasdaq
+    Get the complete multivariate time series data.
 
-def gssset_TAIEX():
-    
+    :return: Pandas DataFrame
     """
-    Returns an array containing the TAIEX time series
+    dat = get_dataframe('TAIEX.csv.bz2',
+                               'https://github.com/arthurcaio92/pyT2FTS/raw/main/data/NASDAQ.bz2',
+                               sep=",", compression='bz2')
+    dat["Date"] = pd.to_datetime(dat["Date"])
+    return dat
+
+
+def get_SP500():
     """
-    
-    df = pd.read_csv("C:/Users/arthu/Anaconda3/Lib/site-packages/pyT2FTS/TAIEX.csv")
-    df.dropna()
-    taiex = df.avg               # Pega somente a última coluna de dados: a média (avg)
-    taiex = taiex.to_numpy()      # Covnerte de panda dataframe para array numpy
-    
-    return taiex
+    Get the complete multivariate time series data.
+
+    :return: Pandas DataFrame
+    """
+    dat = get_dataframe('TAIEX.csv.bz2',
+                               'https://github.com/arthurcaio92/pyT2FTS/raw/main/data/SP500.bz2',
+                               sep=",", compression='bz2')
+    dat["Date"] = pd.to_datetime(dat["Date"])
+    return dat
+
+
 
 
 

@@ -1,8 +1,6 @@
-from pandas import read_csv   
 from pyT2FTS.sliding_window import janela_deslizante
 from pyT2FTS.datasets import get_TAIEX
-import numpy as np
-import matplotlib.pyplot as plt
+
 
 
 

@@ -1,0 +1,176 @@
+warning: LF will be replaced by CRLF in certo/pyT2FTS.py.
+The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in pyT2FTS.py.
+The file will have its original line endings in your working directory
+[1mdiff --git a/__pycache__/ferramentas.cpython-37.pyc b/__pycache__/ferramentas.cpython-37.pyc[m
+[1mindex 2816bea..99bebf9 100644[m
+Binary files a/__pycache__/ferramentas.cpython-37.pyc and b/__pycache__/ferramentas.cpython-37.pyc differ
+[1mdiff --git a/__pycache__/processo_completo.cpython-37.pyc b/__pycache__/processo_completo.cpython-37.pyc[m
+[1mindex a9b3d26..d51e857 100644[m
+Binary files a/__pycache__/processo_completo.cpython-37.pyc and b/__pycache__/processo_completo.cpython-37.pyc differ
+[1mdiff --git a/__pycache__/pyT2FTS.cpython-37.pyc b/__pycache__/pyT2FTS.cpython-37.pyc[m
+[1mindex ccf672a..8a39003 100644[m
+Binary files a/__pycache__/pyT2FTS.cpython-37.pyc and b/__pycache__/pyT2FTS.cpython-37.pyc differ
+[1mdiff --git a/__pycache__/sliding_window.cpython-37.pyc b/__pycache__/sliding_window.cpython-37.pyc[m
+[1mindex 191ac12..2b4a7af 100644[m
+Binary files a/__pycache__/sliding_window.cpython-37.pyc and b/__pycache__/sliding_window.cpython-37.pyc differ
+[1mdiff --git a/certo/ferramentas.py b/certo/ferramentas.py[m
+[1mindex 64bed36..a6c34ae 100644[m
+[1m--- a/certo/ferramentas.py[m
+[1m+++ b/certo/ferramentas.py[m
+[36m@@ -40,7 +40,51 @@[m [mdef conjuntos_soda(data,gridsize):[m
+                          [m
+     return numero_de_sets[m
+     [m
+[32m+[m[41m [m
+[32m+[m[32mdef conjuntos_adp(data,gridsize, distancetype='chebyshev'):[m
+[32m+[m[32m    'A distancia pode ser chebyshev, euclidean, cityblock, sqeuclidean ou cosine'[m
+[32m+[m[41m	[m
+[32m+[m[32m    """Retorna apenas o numero de conjuntos encontrado pelo ADP"""[m
+[32m+[m[41m    [m
+[32m+[m[32m    print("Gridsize: {}".format(gridsize))[m
+[32m+[m[41m    [m
+[32m+[m[32m    #from procedimentoT2FTS.OfflineADP import ADP[m[41m [m
+[32m+[m[32m    from OfflineADP import ADP[m[41m [m
+[32m+[m[41m    [m
+[32m+[m	[32m#Make it a two-column dataframe[m[41m       [m
+[32m+[m[32m    dados = pd.DataFrame(data, columns = ['avg'])[m
+[32m+[m[32m    dados.insert(0, '#', range(1,len(dados)+1))[m
+[32m+[m[41m    [m
+[32m+[m[32m    centre, idx = ADP(dados,gridsize)[m[41m           [m
+[32m+[m[41m    [m
+[32m+[m[32m    'Define o numero de sets'[m
+[32m+[m[32m    numero_de_sets = len(centre)[m
+[32m+[m[41m                         [m
+[32m+[m[32m    return numero_de_sets[m
+[32m+[m
+[32m+[m
+[32m+[m[32mdef conjuntos_dbscan(data,gridsize, distancetype='chebyshev'):[m
+[32m+[m[32m    'A distancia pode ser chebyshev, euclidean, cityblock, sqeuclidean ou cosine'[m
+[32m+[m[41m	[m
+[32m+[m[32m    """Retorna apenas o numero de conjuntos encontrado pelo ADP"""[m
+[32m+[m[41m    [m
+[32m+[m[32m    print("Gridsize: {}".format(gridsize))[m
+[32m+[m[41m    [m
+[32m+[m[32m    #from procedimentoT2FTS.OfflineADP import ADP[m[41m [m
+[32m+[m[32m    from OfflineADP import ADP[m[41m [m
+[32m+[m[41m    [m
+[32m+[m	[32m#Make it a two-column dataframe[m[41m       [m
+[32m+[m[32m    dados = pd.DataFrame(data, columns = ['avg'])[m
+[32m+[m[32m    dados.insert(0, '#', range(1,len(dados)+1))[m
+[32m+[m[41m    [m
+[32m+[m[32m    centre, idx = ADP(dados,gridsize)[m[41m           [m
+     [m
+[32m+[m[32m    'Define o numero de sets'[m
+[32m+[m[32m    numero_de_sets = len(centre)[m
+[32m+[m[41m                         [m
+[32m+[m[32m    return numero_de_sets[m
+[32m+[m
+[32m+[m
+ [m
+ [m
+ [m
+[36m@@ -174,26 +218,7 @@[m [mdef conjuntos_soda_definindo_tamanho_dos_sets(self,data,data_original,gridsize):[m
+ [m
+ [m
+ [m
+[31m-def conjuntos_adp(data,gridsize, distancetype='chebyshev'):[m
+[31m-    'A distancia pode ser chebyshev, euclidean, cityblock, sqeuclidean ou cosine'[m
+[31m-	[m
+[31m-    """Retorna apenas o numero de conjuntos encontrado pelo ADP"""[m
+[31m-    [m
+[31m-    print("Gridsize: {}".format(gridsize))[m
+[31m-    [m
+[31m-    #from procedimentoT2FTS.OfflineADP import ADP [m
+[31m-    from OfflineADP import ADP [m
+[31m-    [m
+[31m-	#Make it a two-column dataframe       [m
+[31m-    dados = pd.DataFrame(data, columns = ['avg'])[m
+[31m-    dados.insert(0, '#', range(1,len(dados)+1))[m
+[31m-    [m
+[31m-    centre, idx = ADP(dados,gridsize)           [m
+[31m-    [m
+[31m-    'Define o numero de sets'[m
+[31m-    numero_de_sets = len(centre)[m
+[31m-                         [m
+[31m-    return numero_de_sets[m
+[32m+[m
+ [m
+ [m
+     [m
+[1mdiff --git a/certo/processo_completo.py b/certo/processo_completo.py[m
+[1mindex 9d54b91..44230ab 100644[m
+[1m--- a/certo/processo_completo.py[m
+[1m+++ b/certo/processo_completo.py[m
+[36m@@ -1,6 +1,7 @@[m
+ [m
+ from procedimentoT2FTS.pyT2FTS import Type2Model,IT2FS_plot[m
+[31m-from procedimentoT2FTS.ferramentas import conjuntos_soda,conjuntos_adp,metricas_erro,plotar_previsao  #biblioteca com funcoes uteis para sistema fuzzy[m
+[32m+[m[32mfrom procedimentoT2FTS.ferramentas import metricas_erro,plotar_previsao  #biblioteca com funcoes uteis para sistema fuzzy[m
+[32m+[m[32mfrom procedimentoT2FTS.ferramentas import conjuntos_soda,conjuntos_adp,conjuntos_dbscan[m
+ from pyFTS.common import Transformations[m
+ import numpy as np[m
+ [m
+[36m@@ -47,12 +48,19 @@[m [mdef T2FTS(data,metodo_part,numero_de_sets,order=1,diff=1):[m
+ [m
+     if metodo_part == 'chen':[m
+         modelo.chen_model_sobreposto(numero_de_sets)[m
+[32m+[m[41m        [m
+     elif metodo_part == 'soda':[m
+         numero_de_sets = conjuntos_soda(treino,numero_de_sets)[m
+[31m-        modelo.chen_model_sobreposto(numero_de_sets)       [m
+[32m+[m[32m        modelo.chen_model_sobreposto(numero_de_sets)[m[41m   [m
+[32m+[m[41m        [m
+     elif metodo_part == 'ADP':[m
+         numero_de_sets = conjuntos_adp(treino, numero_de_sets)[m
+         modelo.chen_model_sobreposto(numero_de_sets)[m
+[32m+[m[41m        [m
+[32m+[m[32m    elif metodo_part == 'DBSCAN':[m
+[32m+[m[32m        numero_de_sets = conjuntos_dbscan(treino, numero_de_sets)[m
+[32m+[m[32m        modelo.chen_model_sobreposto(numero_de_sets)[m
+[32m+[m[41m        [m
+     else:[m
+         raise Exception("Method %s not implemented" % metodo_part)[m
+         [m
+[36m@@ -62,7 +70,7 @@[m [mdef T2FTS(data,metodo_part,numero_de_sets,order=1,diff=1):[m
+     '------------------------------------------------ Treinamento  ------------------------------------------'[m
+         [m
+     'Treina o modelo'[m
+[31m-    modelo.treinamento()[m
+[32m+[m[32m    FLR,FLRG = modelo.treinamento()[m
+     [m
+     '------------------------------------------------  Teste  ------------------------------------------'[m
+     'Clipa os dados para estarem dentro do universo de discurso'[m
+[36m@@ -94,6 +102,6 @@[m [mdef T2FTS(data,metodo_part,numero_de_sets,order=1,diff=1):[m
+     #plotar_previsao(teste,resultado_processo)[m
+     [m
+     [m
+[31m-    return lista_erros,numero_de_sets[m
+[32m+[m[32m    return lista_erros,numero_de_sets,FLR,FLRG[m
+     [m
+     [m
+[1mdiff --git a/certo/pyT2FTS.py b/certo/pyT2FTS.py[m
+[1mindex ad86306..056033d 100644[m
+[1m--- a/certo/pyT2FTS.py[m
+[1m+++ b/certo/pyT2FTS.py[m
+[36m@@ -8,6 +8,14 @@[m [mfrom itertools import product[m
+ from numpy import linspace[m
+ import numpy as np[m
+ [m
+[32m+[m
+[32m+[m[32m"""[m
+[32m+[m[32mBuilt thanks to Haghrah's PyIT2FLS[m
+[32m+[m[32mReference:[m
+[32m+[m[32mHaghrah, Amir Arslan, and Sehraneh Ghaemi. "PyIT2FLS: A New Python Toolkit for Interval Type 2 Fuzzy Logic Systems." arXiv preprint arXiv:1909.10051 (2019).[m
+[32m+[m
+[32m+[m[32m"""[m
+[32m+[m
+ """[m
+ [m
+ OBS: Se der erro float division by zero[m
+[36m@@ -2411,6 +2419,75 @@[m [mclass Type2Model():[m
+   [m
+         #return lista_regras,pert_val,dict_conj[m
+             [m
+[32m+[m[41m        [m
+[32m+[m[32m        'We will create the fuzzy logical relantionship groups (FLRGs) by analysing all the r

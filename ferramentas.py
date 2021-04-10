@@ -48,8 +48,8 @@ def conjuntos_adp(data,gridsize, distancetype='chebyshev'):
     
     print("Gridsize: {}".format(gridsize))
     
-    #from pyT2FTS.OfflineADP import ADP 
-    from OfflineADP import ADP 
+    from pyT2FTS.OfflineADP import ADP 
+    #from OfflineADP import ADP 
     
 	#Make it a two-column dataframe       
     dados = pd.DataFrame(data, columns = ['avg'])

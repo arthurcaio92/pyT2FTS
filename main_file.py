@@ -13,15 +13,15 @@ data = data.to_numpy()      # Covnerte de panda dataframe para array numpy
 '------------------------------------------------ Gridsearch Parameters -------------------------------------------------'
 
 
-ordens = [1,2]
+ordens = [1]
 
 'particoes must be a list'
-particoes = [1,2]
+particoes = [10]
 #particoes = np.arange(1,6)
 
 diff = 1
         
-metodo_part = 'soda'    
+metodo_part = 'ADP'    
 
 '------------------------------------------------ Running the model -------------------------------------------------'
 

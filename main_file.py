@@ -1,6 +1,6 @@
 from pyT2FTS.sliding_window import janela_deslizante
 from pyT2FTS.datasets import get_TAIEX
-
+import numpy as np
 
 
 
@@ -16,8 +16,8 @@ data = data.to_numpy()      # Covnerte de panda dataframe para array numpy
 ordens = [1]
 
 'particoes must be a list'
-particoes = [10]
-#particoes = np.arange(1,6)
+#particoes = [10]
+particoes = np.arange(1,6)
 
 diff = 1
         

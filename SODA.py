@@ -198,7 +198,7 @@ def cloud_member_recruitment(ModelNumber,Center_samples,Uniquesample,grid_trad,g
 
 def plotar_soda(data,output):
     
-    soda_idx = output['IDX']
+    soda_idx = output['IDX'] #lista com as associações de conjuntos de cada amostra da serie
     centros = output['C']
 
     

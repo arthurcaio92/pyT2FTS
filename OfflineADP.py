@@ -43,7 +43,7 @@ def ADP(data, granularity=11, distancetype='chebyshev'):
     unidata_density=numpy.transpose(unidata_pi)*numpy.transpose(frequency)/(unidata_pi*2*L0)
     unidata_Gdensity=numpy.multiply(unidata_density,numpy.transpose(frequency))
 
-    pos=numpy.zeros(L0).astype(int)
+    pos=numpy.zeros(L0).astype(int)  # se der erro, tira esse astype
     pos[0]=int(numpy.argmax(unidata_Gdensity))
     seq=numpy.array(range(0,L0))
     seq=numpy.delete(seq,pos[0])

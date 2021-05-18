@@ -1,7 +1,7 @@
 
 from pyT2FTS.T2FTS import Type2Model,IT2FS_plot
 from pyT2FTS.ferramentas import metricas_erro,plotar_previsao  #biblioteca com funcoes uteis para sistema fuzzy
-from pyT2FTS.ferramentas import conjuntos_soda,conjuntos_adp,conjuntos_dbscan
+from pyT2FTS.Partitioners import conjuntos_soda,conjuntos_adp,conjuntos_dbscan
 from pyT2FTS.Transformations import Differential
 import numpy as np
 
@@ -17,7 +17,7 @@ import numpy as np
     
 """
     
-def T2FTS(data,metodo_part,numero_de_sets,order=1,diff=1):
+def T2FTS(data,metodo_part,partition_parameters,order,diff):
         
     '------------------------------------------------Definição dos intervalos ------------------------------------------'
     
@@ -47,18 +47,21 @@ def T2FTS(data,metodo_part,numero_de_sets,order=1,diff=1):
     '------------------------------------------------ Geração de sets  -------------------------------------------------'
 
     if metodo_part == 'chen':
-        modelo.chen_model_sobreposto(numero_de_sets)
+        modelo.chen_model_sobreposto(partition_parameters)
         
     elif metodo_part == 'soda':
-        numero_de_sets = conjuntos_soda(treino,numero_de_sets)
+        gridsize = partition_parameters
+        numero_de_sets = conjuntos_soda(treino,gridsize)
         modelo.chen_model_sobreposto(numero_de_sets)   
         
     elif metodo_part == 'ADP':
-        numero_de_sets = conjuntos_adp(treino, numero_de_sets)
+        gridsize = partition_parameters
+        numero_de_sets = conjuntos_adp(treino, gridsize)
         modelo.chen_model_sobreposto(numero_de_sets)
         
     elif metodo_part == 'DBSCAN':
-        numero_de_sets = conjuntos_dbscan(treino, numero_de_sets)
+        eps = partition_parameters
+        numero_de_sets = conjuntos_dbscan(treino, eps)
         modelo.chen_model_sobreposto(numero_de_sets)
         
     else:

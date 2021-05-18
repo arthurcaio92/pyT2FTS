@@ -104,7 +104,7 @@ def janela_deslizante(data,diff,particoes,ordens,metodo_part):
                 'Define o numero de conjuntos'
                 numero_de_sets = numero
                                 
-                lista_erros,n_sets,FLR,FLRG = T2FTS(dados,metodo_part,numero_de_sets=numero_de_sets,order=order,diff=diff)
+                lista_erros,n_sets,FLR,FLRG = T2FTS(dados,metodo_part,partition_parameters=numero_de_sets,order=order,diff=diff)
                
                 print("---------------------------------")
                    
@@ -405,7 +405,7 @@ def comparison_sliding_window(datasets,dataset_names,diff,particoes,ordens,metod
                     'Define o numero de conjuntos'
                     numero_de_sets = numero
                                     
-                    lista_erros,n_sets = T2FTS(dados,metodo_part,numero_de_sets=numero_de_sets,order=order,diff=diff)
+                    lista_erros,n_sets = T2FTS(dados,metodo_part,partition_parameters=numero_de_sets,order=order,diff=diff)
                    
                     print("---------------------------------")
                        

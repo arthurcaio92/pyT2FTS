@@ -17,11 +17,11 @@ ordens = [1]
 
 'particoes must be a list'
 #particoes = [10]
-particoes = np.arange(1,6)
+particoes = np.arange(19,20)
 
 diff = 1
         
-metodo_part = 'ADP'    
+metodo_part = 'DBSCAN'    
 
 '------------------------------------------------ Running the model -------------------------------------------------'
 

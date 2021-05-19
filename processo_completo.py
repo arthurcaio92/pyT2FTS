@@ -47,6 +47,7 @@ def T2FTS(data,metodo_part,partition_parameters,order,diff):
     '------------------------------------------------ Geração de sets  -------------------------------------------------'
 
     if metodo_part == 'chen':
+        numero_de_sets = partition_parameters
         modelo.chen_model_sobreposto(partition_parameters)
         
     elif metodo_part == 'soda':
@@ -89,7 +90,7 @@ def T2FTS(data,metodo_part,partition_parameters,order,diff):
         raise Exception("Method %s not implemented" % metodo_part)
         
         
-    #IT2FS_plot(*modelo.dict_sets.values())
+    IT2FS_plot(*modelo.dict_sets.values())
     
     '------------------------------------------------ Treinamento  ------------------------------------------'
         

@@ -2291,7 +2291,7 @@ class Type2Model():
             nome = 'A%d'%x  #manda junto o nome do set para usar se precisar
             dict_sets['A%d' %x] = FuzzySet(self.domain, tri_mf, [b_esq, topo_tri, b_dir, 1],tri_mf, [b_esq+fou_left, topo_tri, b_dir-fou_right, 0.9],nome = nome)
 
-
+        print(dict_sets)
         self.dict_sets = dict_sets
         
         

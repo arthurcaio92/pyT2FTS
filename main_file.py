@@ -17,11 +17,11 @@ ordens = [1]
 
 'particoes must be a list'
 #particoes = [10]
-particoes = np.arange(4,5)
+particoes = np.arange(50,51)
 
 diff = 1
         
-metodo_part = 'soda'    
+metodo_part = 'chen'    
 
 '------------------------------------------------ Running the model -------------------------------------------------'
 

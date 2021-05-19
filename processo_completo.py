@@ -1,7 +1,7 @@
 
 from pyT2FTS.T2FTS import Type2Model,IT2FS_plot
 from pyT2FTS.ferramentas import metricas_erro,plotar_previsao  #biblioteca com funcoes uteis para sistema fuzzy
-from pyT2FTS.Partitioners import conjuntos_soda,conjuntos_adp,conjuntos_dbscan
+from pyT2FTS.Partitioners import conjuntos_soda,conjuntos_adp,conjuntos_dbscan,conjuntos_cmeans,conjuntos_entropy,conjuntos_fcm,conjuntos_huarng
 from pyT2FTS.Transformations import Differential
 import numpy as np
 
@@ -63,6 +63,27 @@ def T2FTS(data,metodo_part,partition_parameters,order,diff):
         eps = partition_parameters
         numero_de_sets = conjuntos_dbscan(treino, eps)
         modelo.chen_model_sobreposto(numero_de_sets)
+        
+    elif metodo_part == 'CMEANS':
+        k = partition_parameters
+        cmeans_params = conjuntos_cmeans(treino, k)
+        numero_de_sets = len(cmeans_params)
+        modelo.generate_uneven_length_mfs(numero_de_sets,cmeans_params)
+    
+    elif metodo_part == 'entropy':
+        entropy_params = conjuntos_entropy(treino)
+        numero_de_sets = len(entropy_params)
+        modelo.generate_uneven_length_mfs(numero_de_sets,entropy_params)
+        
+    elif metodo_part == 'FCM':
+        fcm_params = conjuntos_fcm(treino)
+        numero_de_sets = len(fcm_params)
+        modelo.generate_uneven_length_mfs(numero_de_sets,fcm_params)
+        
+    elif metodo_part == 'huarng':
+        huarng_params = conjuntos_huarng(treino)
+        numero_de_sets = len(huarng_params)
+        modelo.generate_uneven_length_mfs(numero_de_sets,huarng_params)
         
     else:
         raise Exception("Method %s not implemented" % metodo_part)

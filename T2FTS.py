@@ -2219,8 +2219,9 @@ class Type2Model():
     def chen_model_sobreposto(self,numero_de_sets): 
         """ 
         Cria os conjuntos fuzzy SOBREPOSTOS 
+        1) Identifica as coordenadas de cada triângulo 
+        2) Gera as MFs a partir delas
         
-        :data: dados da serie temporal analisada
         """
         
         'configurações inciais'
@@ -2258,6 +2259,42 @@ class Type2Model():
 
         self.dict_sets = dict_sets
     
+    
+    
+    
+    def generate_uneven_length_mfs(self,numero_de_sets,trimf_params): 
+        """ 
+        Cria os conjuntos fuzzy SOBREPOSTOS recebendo parametros da função triangular
+        
+        :trimf_params: Lista contendo as coordenadas de cada triângulo já prontos para serem montados
+        """
+        
+        'configurações inciais'
+        Type2Model.config_inicial(self,self.training_data,numero_de_sets)
+        
+                                        
+        dict_sets = {}   #Dicionário contendo os sets
+        
+        'Constroi cada set a medida que avança na lista de intervalos de conjuntos'
+        for x in range(1,self.numero_de_sets+1):
+            r,t,y = trimf_params[x-1]
+            b_esq = r        #Base esquerda
+            topo_tri = t     #Topo do triangulo
+            b_dir = y  
+            
+            #print(b_esq,topo_tri,b_dir)
+            
+            fou_right = (b_dir-topo_tri)*0.4        #A mancha nao pode ser maior dos que os vertices do triangulo
+            fou_left = (topo_tri-b_esq)*0.4        #Calcula a mancha da esquerda e direita e pega a menor para valer para os dois
+            #fou = min(fou_left,fou_right)
+            
+            nome = 'A%d'%x  #manda junto o nome do set para usar se precisar
+            dict_sets['A%d' %x] = FuzzySet(self.domain, tri_mf, [b_esq, topo_tri, b_dir, 1],tri_mf, [b_esq+fou_left, topo_tri, b_dir-fou_right, 0.9],nome = nome)
+
+
+        self.dict_sets = dict_sets
+        
+        
     
     
     def chen_model_sequencial(self,numero_de_sets):
@@ -2421,10 +2458,7 @@ class Type2Model():
             
         
         'We will create the fuzzy logical relantionship groups (FLRGs) by analysing all the rules '
-        
-        'IT IS ONLY WORKING FOR FIRST ORDER'
-        
-        #print(lista_regras)
+    
         
         flrg = {}   
         consequents = []

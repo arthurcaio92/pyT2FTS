@@ -2,6 +2,9 @@ from pandas import DataFrame
 
 
 
+    
+    
+
 def conjuntos_soda(data,gridsize):
     
     """Retorna apenas o numero de conjuntos encontrado pelo SODA"""
@@ -76,3 +79,77 @@ def conjuntos_dbscan(data, eps):
         return 1
     
     return numero_de_sets
+
+
+def conjuntos_cmeans(data, k):
+    from pyFTS.partitioners import CMeans
+    from pyFTS.common import Membership as mf
+    
+    #Executa o particionamento e salva num objeto
+    obj = CMeans.CMeansPartitioner(data = data, npart = k, func = mf.trimf)
+    
+    #Lista para dict keys
+    keys = []
+    for k in range(1,k+1):
+        keys.append('A'+str(k))
+    
+    ##Lista para guardar os parâmetros (a, b, c) da função triangular de cada set
+    cmeans_params = []
+    for k in keys:
+        cmeans_params.append(obj.sets[k].parameters)
+    
+    return cmeans_params
+
+def conjuntos_entropy(data):
+    from pyFTS.partitioners import Entropy
+    
+    #Executa o particionamento e salva num objeto
+    obj = Entropy.EntropyPartitioner(data=data)
+    
+    #Lista para dict keys
+    keys = []
+    for i in range(0,len(obj.sets)):
+        keys.append('A'+str(i))
+    
+    ##Lista para guardar os parâmetros (a, b, c) da função triangular de cada set
+    entropy_params = []
+    for i in keys:
+        entropy_params.append(obj.sets[i].parameters)
+    
+    return entropy_params
+
+def conjuntos_fcm(data):
+    from pyFTS.partitioners import FCM
+    
+    #Executa o particionamento e salva num objeto
+    obj = FCM.FCMPartitioner(data=data)
+    
+    #Lista para dict keys
+    keys = []
+    for i in range(1,len(obj.sets)+1):
+        keys.append('A'+str(i))
+    
+    ##Lista para guardar os parâmetros (a, b, c) da função triangular de cada set
+    fcm_params = []
+    for i in keys:
+        fcm_params.append(obj.sets[i].parameters)
+    
+    return fcm_params
+
+def conjuntos_huarng(data):
+    from pyFTS.partitioners import Huarng
+    
+    #Executa o particionamento e salva num objeto
+    obj = Huarng.HuarngPartitioner(data=data)
+    
+    #Lista para dict keys
+    keys = []
+    for i in range(1,len(obj.sets)+1):
+        keys.append('A'+str(i))
+    
+    ##Lista para guardar os parâmetros (a, b, c) da função triangular de cada set
+    huarng_params = []
+    for i in keys:
+        huarng_params.append(obj.sets[i].parameters)
+    
+    return huarng_params

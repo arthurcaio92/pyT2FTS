@@ -222,7 +222,7 @@ def janela_deslizante(data,diff,particoes,ordens,metodo_part):
             erros_especifico['Time(s)'].append(method_elapsed_time)
             erros_especifico['Total Time(s)'].append(None)
 
-
+            
             'Printa na tela o resultado das janelas'
             if metodo_part == 'chen':
                 r = "RMSE Médio - part: " + str(numero) + ", ordem: " + str(order)
@@ -233,6 +233,12 @@ def janela_deslizante(data,diff,particoes,ordens,metodo_part):
                 r = "RMSE Médio - Gridsize: " + str(gridsize) + ", ordem: " + str(order)
                 print("[",r,"]:",avg_rmse)
                 print("---------------------------------")
+            
+            else:
+                r = "RMSE Médio - Parâmetro: " + str(gridsize) + ", ordem: " + str(order)
+                print("[",r,"]:",avg_rmse)
+                print("---------------------------------")
+            
                 
                             
             'usa Pickle para salvar os dicionarios a cada janela'

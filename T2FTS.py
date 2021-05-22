@@ -2291,7 +2291,6 @@ class Type2Model():
             nome = 'A%d'%x  #manda junto o nome do set para usar se precisar
             dict_sets['A%d' %x] = FuzzySet(self.domain, tri_mf, [b_esq, topo_tri, b_dir, 1],tri_mf, [b_esq+fou_left, topo_tri, b_dir-fou_right, 0.9],nome = nome)
 
-        print(dict_sets)
         self.dict_sets = dict_sets
         
         
@@ -3193,11 +3192,133 @@ class Type2Model():
         else:
             raise ValueError("The " + algorithm + " algorithm is not implemented, yet!")
             
+        
+        '--------------------------------'
+        """
+        Nós vamos iterar somente sobre as regras ativadas, e não mais sobre TODAS as regras, 
+        como acontecia antes. Para isso vamos fuzzificar os valores e ver quais conjuntos sao ativados,
+        depois veremos quais regras conte´m esses conjuntos ativados
+        
+        :pert_val: List with the following structure for each value of the time series: (sample,value,sets_activated (upper membership)(lower membeship))
+        :dict_conj: dictionary where the keys are the variables (x1,x2...) and the values are the activated sets
+        ativados: mostra OS CONJUNTOS ativados pelo(s) valor(es) de teste
+        
+        """
+        
+        "Primeiramente vamos analisar quais os conjuntos sao ativados pelo(s) valor(es) de teste"
+        pert_val = []        #lista com valores de pertinencia superior e inferior de cada valor de treinamento
+        conj_ativados = []  #lista sem valores de pertinencia
+        dict_conj = {}
+        
+        amostra = 1 #representa a amostra  que esta sendo analisada do TAIEX (data de analise M/D/ANO)
+        
+        'alpha-cut é o valor minimo de pertinencia que um valor de treinamento deve ter para ser considerado'
+        'como uma regra. Deve-se escolher pois se for zero, podemos ter regras insignificantes sendo adicionadas, gerando ruido'
+        
+        alpha_cut = 0.00001
+        ultimo = list(self.dict_sets.values())
+        ultimo = ultimo[-1]   #Ultimo conjunto da lista de conjuntos
+        
+        ativados = []
+        
+        'Objetivo aqui é descobrir quais conjuntos foram ativados a cada valor de teste'
+
+        for x in inputs.keys():   #itera sobre todos os valores de treinamento
+            conj = 1
+            conj_aux = []
+            pert_val.append(amostra)
+            pert_val.append(x)
+            conj_temp = []
+            sets = []
+            for it2fs in self.dict_sets.values():                         #itera sobre todos os sets
+                try:
+                    u = it2fs.umf(inputs[x], it2fs.umf_params)  
+                except Exception as ex:
+                    print("Valor de entrada: ", inputs[x])
+                    print("Parâmetros", it2fs.umf_params)                    
+                l = it2fs.lmf(inputs[x], it2fs.lmf_params)     #calcula pertinencia do valor x na func. pert. inferior               
+                if u >= alpha_cut:                           #pertinencia = 0 : nao toca o set  
+                    conj_temp.append(conj)            #conjunto sendo ativado eh adicionado a lista temporaria
+                    sets.append(it2fs)
+                    conj_aux.append(conj)
+                    tuple_aux = [str('A%d'%conj),u,l]    #para cada valor de treino(x) tem os seguintes valores: [conjunto,pert.sup.,pert.inf.]
+                    pert_val.append(tuple_aux)
+                elif u > 0.0:                                 #Se for o ultimo conjunto, define este como o ativado ( o ultimo conjunto possui uma parte que nao é sobreposta)
+                    if it2fs == ultimo:
+                        conj_temp.append(conj)
+                conj = conj+1                             #Faz rodar por todos os conjuntos existentes
+            conj_ativados.append(conj_temp)                   #Adiciona a lista a uma lista de lista contendo conjuntos ativados a cada valor de treino
+            ativados.append(sets)
+            pert_val.append('f')                            #Utilizando 'f' para indicar a passagem de um valor de treino para outro
+            dict_conj[x] = conj_aux
+            amostra = amostra +1     #atualiza a amostra 
+        
+        'conj_ativados: mostra os números dos conj. ativados pelo(s) valor(es) de teste'
+        'ativados: mostra OS CONJUNTOS ativados pelo(s) valor(es) de teste'
+        
+        "Agora vamos ver quais regras são ativadas por estes conjuntos ativadas"
+        regras_ativadas = []      
+        
+
+        if self.order == 1:
+            
+            'A cada regra, verifica se o seu antecedente é um dos conjuntos ativados - MAIS RÁPIDA'
+         
+            for rule in self.rules: #pega uma regra de cada vez da lista de regras BOAA
+               for antec in rule[0]: #pega somente os antecedentes da regra analisada
+                   if antec[1] in ativados[0]:
+                       regras_ativadas.append(rule)
+                       
+        """             
+           'Outra forma de fazer isso:'
+           'A cada conjunto ativado, verifica se há regras em que o antecedente seja esse conjunto - MAIS LENTA'
+                   
+            for fuzzyset in ativados[0]:
+                for rule in self.rules: #pega uma regra de cada vez da lista de regras
+                    for antec in rule[0]: #pega somente os antecedentes da regra analisada
+                        if antec[1] == fuzzyset:
+                            regras_ativadas.append(rule)   
+                            
+        """
+                       
+        if self.order == 2:
+            
+            'A estrutura de ativados é: [[A2,A3],[A7,A6]]. Faremos a distributiva para ver todas as possibilidades'
+            associations = list(product(*ativados))  #faz a distributiva entre os valores
+
+            'A cada regra, verifica se os seus antecedentes são um dos conjuntos ativados'
+
+            for rule in self.rules: #pega uma regra de cada vez da lista de regras BOAA
+               antec = rule[0] #pega somente os antecedentes da regra analisada
+               for sets_ativ in associations:      #Itera sobre todos is sets ativados para ver se a regra bate        
+                   if antec[0][1] == sets_ativ[0] and antec[1][1] == sets_ativ[1]:
+                       regras_ativadas.append(rule)
+                       
+                       
+        if self.order == 3:
+            
+            'A estrutura de ativados é: [[A2,A3,A6],[A7,A6,A8]]. Faremos a distributiva para ver todas as possibilidades'
+            associations = list(product(*ativados))  #faz a distributiva entre os valores
+
+            'A cada regra, verifica se os seus antecedentes são um dos conjuntos ativados'
+
+            for rule in self.rules: #pega uma regra de cada vez da lista de regras BOAA
+               antec = rule[0] #pega somente os antecedentes da regra analisada
+               for sets_ativ in associations:      #Itera sobre todos is sets ativados para ver se a regra bate        
+                   if antec[0][1] == sets_ativ[0] and antec[1][1] == sets_ativ[1] and antec[2][1] == sets_ativ[2]:
+                       regras_ativadas.append(rule)
+            
+
+
+        '--------------------------------'    
+    
+            
         if method == "Centroid":
             B = {out: [] for out in self.outputs}
-            for rule in self.rules:
+            for rule in regras_ativadas:
                 u = 1
                 l = 1
+                'O problema aqui é que está passando todas as regras pelo input para saber quais foram ativadas. O ideal eh criar um filtro pra passar so pelas regras pertinentes ao(s) antecedente(s)'
                 for input_statement in rule[0]:  #cada regra eh: [[(x1,antecedente)],[(y1,consequente)]] entao input_statement e uma lista de tuplas de antecedentes
                     u = t_norm(u, input_statement[1].umf(inputs[input_statement[0]], input_statement[1].umf_params)) #calcula a pertinencia de cada input no set da regra
                     l = t_norm(l, input_statement[1].lmf(inputs[input_statement[0]], input_statement[1].lmf_params))

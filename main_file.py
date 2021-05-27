@@ -13,21 +13,25 @@ data = data.to_numpy()      # Covnerte de panda dataframe para array numpy
 '------------------------------------------------ Gridsearch Parameters -------------------------------------------------'
 
 
-ordens = [1,2,3]
+ordens = [1]
 
 'particoes must be a list'
 #particoes = [10]
 particoes = np.arange(1,11)
 
 diff = 1
-        
-metodo_part = 'soda'    
+
+#metodos: 'chen' 'soda' 'ADP' 'DBSCAN' 'CMEANS' 'entropy' 'FCM'  
+metodo_part = 'soda'   
+
+#usar 'triangular' ou 'trapezoidal' ou 'gaussian'
+mf_type = 'triangular' 
 
 '------------------------------------------------ Running the model -------------------------------------------------'
 
 
 'Builds and runs the model'
-df_geral,df_especifico = janela_deslizante(data,diff,particoes,ordens,metodo_part)
+df_geral,df_especifico = janela_deslizante(data,diff,particoes,ordens,metodo_part,mf_type)
 
 
 

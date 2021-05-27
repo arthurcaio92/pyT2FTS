@@ -17,7 +17,7 @@ import numpy as np
     
 """
     
-def T2FTS(data,metodo_part,partition_parameters,order,diff):
+def T2FTS(data,metodo_part,mf_type,partition_parameters,order,diff):
         
     '------------------------------------------------Definição dos intervalos ------------------------------------------'
     
@@ -48,39 +48,39 @@ def T2FTS(data,metodo_part,partition_parameters,order,diff):
 
     if metodo_part == 'chen':
         numero_de_sets = partition_parameters
-        modelo.chen_model_sobreposto(partition_parameters)
+        modelo.chen_model_sobreposto(partition_parameters, mf_type)
         
     elif metodo_part == 'soda':
         gridsize = partition_parameters
         numero_de_sets = conjuntos_soda(treino,gridsize)
-        modelo.chen_model_sobreposto(numero_de_sets)   
+        modelo.chen_model_sobreposto(numero_de_sets, mf_type)   
         
     elif metodo_part == 'ADP':
         gridsize = partition_parameters
         numero_de_sets = conjuntos_adp(treino, gridsize)
-        modelo.chen_model_sobreposto(numero_de_sets)
+        modelo.chen_model_sobreposto(numero_de_sets, mf_type)
         
     elif metodo_part == 'DBSCAN':
         eps = partition_parameters
         numero_de_sets = conjuntos_dbscan(treino, eps)
-        modelo.chen_model_sobreposto(numero_de_sets)
+        modelo.chen_model_sobreposto(numero_de_sets, mf_type)
         
     elif metodo_part == 'CMEANS':
         k = partition_parameters
-        cmeans_params = conjuntos_cmeans(treino, k)
+        cmeans_params = conjuntos_cmeans(treino, k, mf_type)
         numero_de_sets = len(cmeans_params)
-        modelo.generate_uneven_length_mfs(numero_de_sets,cmeans_params)
+        modelo.generate_uneven_length_mfs(numero_de_sets, mf_type, cmeans_params)
     
     elif metodo_part == 'entropy':
-        entropy_params = conjuntos_entropy(treino)
+        entropy_params = conjuntos_entropy(treino, mf_type)
         numero_de_sets = len(entropy_params)
-        modelo.generate_uneven_length_mfs(numero_de_sets,entropy_params)
+        modelo.generate_uneven_length_mfs(numero_de_sets, mf_type, entropy_params)
         
     elif metodo_part == 'FCM':
-        fcm_params = conjuntos_fcm(treino)
+        fcm_params = conjuntos_fcm(treino, mf_type)
         numero_de_sets = len(fcm_params)
-        modelo.generate_uneven_length_mfs(numero_de_sets,fcm_params)
-        
+        modelo.generate_uneven_length_mfs(numero_de_sets, mf_type, fcm_params)
+    
     elif metodo_part == 'huarng':
         huarng_params = conjuntos_huarng(treino)
         numero_de_sets = len(huarng_params)
@@ -90,7 +90,7 @@ def T2FTS(data,metodo_part,partition_parameters,order,diff):
         raise Exception("Method %s not implemented" % metodo_part)
         
         
-    #IT2FS_plot(*modelo.dict_sets.values())
+    IT2FS_plot(*modelo.dict_sets.values())
     
     '------------------------------------------------ Treinamento  ------------------------------------------'
         

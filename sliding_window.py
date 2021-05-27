@@ -5,7 +5,7 @@ import pickle #To save the data as the process goes
 import time
 
     
-def janela_deslizante(data,diff,particoes,ordens,metodo_part):
+def janela_deslizante(data,diff,particoes,ordens,metodo_part,mf_type):
     
     """Realiza a janela deslizante sobre um conjunto de dados.
     Tamanho da janela padrão é de 1000 amostras.
@@ -104,7 +104,7 @@ def janela_deslizante(data,diff,particoes,ordens,metodo_part):
                 'Define o numero de conjuntos'
                 numero_de_sets = numero
                                 
-                lista_erros,n_sets,FLR,FLRG = T2FTS(dados,metodo_part,partition_parameters=numero_de_sets,order=order,diff=diff)
+                lista_erros,n_sets,FLR,FLRG = T2FTS(dados,metodo_part,mf_type,partition_parameters=numero_de_sets,order=order,diff=diff)
                
                 print("---------------------------------")
                    
@@ -275,11 +275,11 @@ def janela_deslizante(data,diff,particoes,ordens,metodo_part):
 
     'Define o nome do arquivo final com os erros'
     if diff == 0:  
-        nome_arquivo = "erros" + "_semdiff_" + metodo_part + "_" + str(particoes[0]) + "a" + str(particoes[-1]) + ".xlsx"
+        nome_arquivo = "erros" + "_semdiff_" + metodo_part + mf + "_" + str(particoes[0]) + "a" + str(particoes[-1]) + ".xlsx"
         
     elif diff == 1:   
-        nome_arquivo = "erros" + "_diff_" + metodo_part + "_" + str(particoes[0]) + "a" + str(particoes[-1]) + ".xlsx"      
-        
+        nome_arquivo = "erros" + "_diff_" + metodo_part + mf + "_" + str(particoes[0]) + "a" + str(particoes[-1]) + ".xlsx"      
+           
     
     print("Arquivo salvo:",nome_arquivo)
     writer = pd.ExcelWriter(nome_arquivo, engine='xlsxwriter')

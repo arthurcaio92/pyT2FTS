@@ -2216,57 +2216,94 @@ class Type2Model():
 
         
 
-    def chen_model_sobreposto(self,numero_de_sets): 
+    def chen_model_sobreposto(self, numero_de_sets, mf_type): 
         """ 
         Cria os conjuntos fuzzy SOBREPOSTOS 
-        1) Identifica as coordenadas de cada triângulo 
+        1) Identifica as coordenadas de cada função 
         2) Gera as MFs a partir delas
         
         """
         
         'configurações inciais'
         Type2Model.config_inicial(self,self.training_data,numero_de_sets)
-        
-        pontos_conj = []
-        for x in range(self.numero_de_sets+2):  # descobre os pontos de inicio de cada conjunto
-            pontos_conj.append(self.dominio_inf + (self.intervalo_entre_set * x))
-            
-
-        intervalos_conjuntos = []
-        'Constroi os intervalos de cada set'
-        for x in range(1,self.numero_de_sets+1):
-            aux = [pontos_conj[x-1],pontos_conj[x],pontos_conj[x+1]]
-            intervalos_conjuntos.append(aux)
                                         
         dict_sets = {}   #Dicionário contendo os sets
         
-        'Constroi cada set a medida que avança na lista de intervalos de conjuntos'
-        for x in range(1,self.numero_de_sets+1):
-      
-            r,t,y = intervalos_conjuntos[x-1]
-            b_esq = r        #Base esquerda
-            topo_tri = t     #Topo do triangulo
-            b_dir = y  
+        if mf_type=='triangular':
             
-            #print(b_esq,topo_tri,b_dir)
+            'Descobre os pontos de início de cada conjunto'
+            pontos_conj = []
+            for x in range(self.numero_de_sets+2):
+                pontos_conj.append(self.dominio_inf + (self.intervalo_entre_set * x))
             
-            fou_right = (b_dir-topo_tri)*0.4        #A mancha nao pode ser maior dos que os vertices do triangulo
-            fou_left = (topo_tri-b_esq)*0.4        #Calcula a mancha da esquerda e direita e pega a menor para valer para os dois
-            #fou = min(fou_left,fou_right)
-            
-            nome = 'A%d'%x  #manda junto o nome do set para usar se precisar
-            dict_sets['A%d' %x] = FuzzySet(self.domain, tri_mf, [b_esq, topo_tri, b_dir, 1],tri_mf, [b_esq+fou_left, topo_tri, b_dir-fou_right, 0.9],nome = nome)
+            'Constroi os intervalos de cada set'
+            intervalos_conjuntos = []
+            for x in range(1,self.numero_de_sets+1):
+                aux = [pontos_conj[x-1],pontos_conj[x],pontos_conj[x+1]]
+                intervalos_conjuntos.append(aux)
+                
+            'Constroi cada set a medida que avança na lista de intervalos de conjuntos'
+            for x in range(1,self.numero_de_sets+1):
+          
+                r,t,y = intervalos_conjuntos[x-1]
+                b_esq = r        #Base esquerda
+                topo_tri = t     #Topo do triangulo
+                b_dir = y  
+                
+                #print(b_esq,topo_tri,b_dir)
+                
+                fou_right = (b_dir-topo_tri)*0.4        #A mancha nao pode ser maior dos que os vertices do triangulo
+                fou_left = (topo_tri-b_esq)*0.4        #Calcula a mancha da esquerda e direita e pega a menor para valer para os dois
+                #fou = min(fou_left,fou_right)
+                
+                nome = 'A%d'%x  #manda junto o nome do set para usar se precisar
+                dict_sets['A%d' %x] = FuzzySet(self.domain, tri_mf, [b_esq, topo_tri, b_dir, 1],tri_mf, [b_esq+fou_left, topo_tri, b_dir-fou_right, 0.9],nome = nome)
 
+        if mf_type=='trapezoidal':
+            
+            'Descobre o centroide de cada conjunto'
+            centroides = []
+            for x in range(1,self.numero_de_sets+1):
+                centroides.append(self.dominio_inf + (self.intervalo_entre_set*x))
+            
+            'Constroi os intervalos de cada set'
+            mf_params = []
+            for x in range(self.numero_de_sets):
+                aux = [centroides[x]-0.75*self.largura_set,centroides[x]-0.25*self.largura_set,centroides[x]+0.25*self.largura_set,centroides[x]+0.75*self.largura_set]
+                mf_params.append(aux)
+                
+            'Constroi cada set a medida que avança na lista de intervalos de conjuntos'
+            for x in range(1,self.numero_de_sets+1):
+                a,b1,b2,c = mf_params[x-1]
+     
+                fou_right = (c-b2)*0.4       #A mancha nao pode ser maior dos que os vertices do triangulo
+                fou_left = (b1-a)*0.4        #Calcula a mancha da esquerda e direita e pega a menor para valer para os dois
+                
+                nome = 'A%d'%x  #manda junto o nome do set para usar se precisar
+                dict_sets['A%d' %x] = FuzzySet(self.domain, trapezoid_mf, [a, b1, b2, c, 1],trapezoid_mf, [a+fou_left, b1, b2, c-fou_right, 0.9],nome = nome)
+
+        if mf_type=='gaussian':
+            stdv = 30
+            
+            'Descobre o centroide de cada conjunto'
+            centroides = []
+            for x in range(1,self.numero_de_sets+1):
+                centroides.append(self.dominio_inf + (self.intervalo_entre_set*x))
+            
+                nome = 'A%d'%x
+                dict_sets['A%d' %x] = FuzzySet(self.domain, gaussian_mf, [centroides[x-1], stdv, 1], gaussian_mf, [centroides[x-1], stdv*0.50, 0.75], nome = nome)
+    
+                
         self.dict_sets = dict_sets
     
     
     
     
-    def generate_uneven_length_mfs(self,numero_de_sets,trimf_params): 
+    def generate_uneven_length_mfs(self,numero_de_sets,mf_type,mf_params): 
         """ 
         Cria os conjuntos fuzzy SOBREPOSTOS recebendo parametros da função triangular
         
-        :trimf_params: Lista contendo as coordenadas de cada triângulo já prontos para serem montados
+        :mf_params: Lista contendo os parâmetros da função de pertinência a ser utilizada
         """
         
         'configurações inciais'
@@ -2276,21 +2313,40 @@ class Type2Model():
         dict_sets = {}   #Dicionário contendo os sets
         
         'Constroi cada set a medida que avança na lista de intervalos de conjuntos'
-        for x in range(1,self.numero_de_sets+1):
-            r,t,y = trimf_params[x-1]
-            b_esq = r        #Base esquerda
-            topo_tri = t     #Topo do triangulo
-            b_dir = y  
-            
-            #print(b_esq,topo_tri,b_dir)
-            
-            fou_right = (b_dir-topo_tri)*0.4        #A mancha nao pode ser maior dos que os vertices do triangulo
-            fou_left = (topo_tri-b_esq)*0.4        #Calcula a mancha da esquerda e direita e pega a menor para valer para os dois
-            #fou = min(fou_left,fou_right)
-            
-            nome = 'A%d'%x  #manda junto o nome do set para usar se precisar
-            dict_sets['A%d' %x] = FuzzySet(self.domain, tri_mf, [b_esq, topo_tri, b_dir, 1],tri_mf, [b_esq+fou_left, topo_tri, b_dir-fou_right, 0.9],nome = nome)
-
+        if mf_type=='triangular':
+            for x in range(1,self.numero_de_sets+1):
+                r,t,y = mf_params[x-1]
+                b_esq = r        #Base esquerda
+                topo_tri = t     #Topo do triangulo
+                b_dir = y  
+                
+                #print(b_esq,topo_tri,b_dir)
+                
+                fou_right = (b_dir-topo_tri)*0.4        #A mancha nao pode ser maior dos que os vertices do triangulo
+                fou_left = (topo_tri-b_esq)*0.4        #Calcula a mancha da esquerda e direita e pega a menor para valer para os dois
+                #fou = min(fou_left,fou_right)
+                
+                nome = 'A%d'%x  #manda junto o nome do set para usar se precisar
+                dict_sets['A%d' %x] = FuzzySet(self.domain, tri_mf, [b_esq, topo_tri, b_dir, 1],tri_mf, [b_esq+fou_left, topo_tri, b_dir-fou_right, 0.9],nome = nome)
+        
+        elif mf_type=='trapezoidal':
+            for x in range(1,self.numero_de_sets+1):
+                a,b1,b2,c = mf_params[x-1]
+                 
+                fou_right = (c-b2)*0.6       #A mancha nao pode ser maior dos que os vertices do triangulo
+                fou_left = (b1-a)*0.6        #Calcula a mancha da esquerda e direita e pega a menor para valer para os dois
+                
+                #h = 1 - (fou_left/(b1-a))     #Utilizar caso queira a mancha com a mesma inclinação do trapézio
+                
+                h = 0.9         #h*(b1-a))+a+fou_left, h*(c-b2))+c-fou_right
+                
+                nome = 'A%d'%x  #manda junto o nome do set para usar se precisar
+                dict_sets['A%d' %x] = FuzzySet(self.domain, trapezoid_mf, [a, b1, b2, c, 1],trapezoid_mf, [a+fou_left, b1, b2, c-fou_right, h],nome = nome)
+        
+        else:
+            print('Função de pertinencia não implementada')
+        
+        #print(dict_sets)
         self.dict_sets = dict_sets
         
         

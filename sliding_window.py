@@ -275,10 +275,10 @@ def janela_deslizante(data,diff,particoes,ordens,metodo_part,mf_type):
 
     'Define o nome do arquivo final com os erros'
     if diff == 0:  
-        nome_arquivo = "erros" + "_semdiff_" + metodo_part + mf + "_" + str(particoes[0]) + "a" + str(particoes[-1]) + ".xlsx"
+        nome_arquivo = "erros" + "_semdiff_" + metodo_part + "_" + mf_type + "_" + str(particoes[0]) + "a" + str(particoes[-1]) + ".xlsx"
         
     elif diff == 1:   
-        nome_arquivo = "erros" + "_diff_" + metodo_part + mf + "_" + str(particoes[0]) + "a" + str(particoes[-1]) + ".xlsx"      
+        nome_arquivo = "erros" + "_diff_" + metodo_part + "_" + mf_type + "_" + str(particoes[0]) + "a" + str(particoes[-1]) + ".xlsx"      
            
     
     print("Arquivo salvo:",nome_arquivo)

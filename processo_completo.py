@@ -90,7 +90,7 @@ def T2FTS(data,metodo_part,mf_type,partition_parameters,order,diff):
         raise Exception("Method %s not implemented" % metodo_part)
         
         
-    IT2FS_plot(*modelo.dict_sets.values())
+    #IT2FS_plot(*modelo.dict_sets.values())
     
     '------------------------------------------------ Treinamento  ------------------------------------------'
         

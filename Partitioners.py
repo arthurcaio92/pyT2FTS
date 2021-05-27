@@ -1,8 +1,6 @@
 from pandas import DataFrame
 
-
-
-    
+  
     
 
 def conjuntos_soda(data,gridsize):
@@ -81,58 +79,60 @@ def conjuntos_dbscan(data, eps):
     return numero_de_sets
 
 
-def conjuntos_cmeans(data, k):
+def conjuntos_cmeans(data, k, mf_type):
     from pyFTS.partitioners import CMeans
-    from pyFTS.common import Membership as mf
+    from pyFTS.common import Membership #utilizado no argumento func
+    
+    if mf_type == 'triangular':
+        mf_type = Membership.trimf
+    elif mf_type == 'trapezoidal':
+        mf_type = Membership.trapmf
     
     #Executa o particionamento e salva num objeto
-    obj = CMeans.CMeansPartitioner(data = data, npart = k, func = mf.trimf)
+    obj = CMeans.CMeansPartitioner(data=data, npart=k, func=mf_type)
     
-    #Lista para dict keys
-    keys = []
-    for k in range(1,k+1):
-        keys.append('A'+str(k))
-    
-    ##Lista para guardar os parâmetros (a, b, c) da função triangular de cada set
+    ##Lista para guardar os parâmetros da função de cada set    
     cmeans_params = []
-    for k in keys:
-        cmeans_params.append(obj.sets[k].parameters)
+    for k in range(1,k+1):
+        cmeans_params.append(obj.sets['A'+str(k)].parameters)
     
     return cmeans_params
 
-def conjuntos_entropy(data):
+def conjuntos_entropy(data, mf_type):
     from pyFTS.partitioners import Entropy
+    from pyFTS.common import Membership
     
+    if mf_type == 'triangular':
+        mf_type = Membership.trimf
+    elif mf_type == 'trapezoidal':
+        mf_type = Membership.trapmf
+
     #Executa o particionamento e salva num objeto
-    obj = Entropy.EntropyPartitioner(data=data)
+    obj = Entropy.EntropyPartitioner(data=data, func=mf_type)
     
-    #Lista para dict keys
-    keys = []
-    for i in range(0,len(obj.sets)):
-        keys.append('A'+str(i))
-    
-    ##Lista para guardar os parâmetros (a, b, c) da função triangular de cada set
+    ##Lista para guardar os parâmetros da função de cada set
     entropy_params = []
-    for i in keys:
-        entropy_params.append(obj.sets[i].parameters)
+    for i in range(1,len(obj.sets)+1):
+        entropy_params.append(obj.sets['A'+str(i)].parameters)
     
     return entropy_params
 
-def conjuntos_fcm(data):
+def conjuntos_fcm(data, mf_type):
     from pyFTS.partitioners import FCM
+    from pyFTS.common import Membership
+    
+    if mf_type == 'triangular':
+        mf_type = Membership.trimf
+    elif mf_type == 'trapezoidal':
+        mf_type = Membership.trapmf
     
     #Executa o particionamento e salva num objeto
-    obj = FCM.FCMPartitioner(data=data)
+    obj = FCM.FCMPartitioner(data=data, func=mf_type)
     
-    #Lista para dict keys
-    keys = []
-    for i in range(1,len(obj.sets)+1):
-        keys.append('A'+str(i))
-    
-    ##Lista para guardar os parâmetros (a, b, c) da função triangular de cada set
+    ##Lista para guardar os parâmetros da função de cada set
     fcm_params = []
-    for i in keys:
-        fcm_params.append(obj.sets[i].parameters)
+    for i in range(1,len(obj.sets)+1):
+        fcm_params.append(obj.sets['A'+str(i)].parameters)
     
     return fcm_params
 

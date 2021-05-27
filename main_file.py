@@ -25,7 +25,7 @@ diff = 1
 metodo_part = 'soda'   
 
 #usar 'triangular' ou 'trapezoidal' ou 'gaussian'
-mf_type = 'triangular' 
+mf_type = 'trapezoidal' 
 
 '------------------------------------------------ Running the model -------------------------------------------------'
 

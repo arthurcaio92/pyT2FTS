@@ -65,9 +65,7 @@ def T2FTS(data,metodo_part,mf_type,partition_parameters,order,diff):
         numero_de_sets = conjuntos_dbscan(treino, eps)
         modelo.chen_model_sobreposto(numero_de_sets, mf_type)
         
-    elif metodo_part == 'CMEANS':
-        
-            
+    elif metodo_part == 'CMEANS': 
         k = partition_parameters
         cmeans_params = conjuntos_cmeans(treino, k, mf_type)
         numero_de_sets = len(cmeans_params)
@@ -92,7 +90,7 @@ def T2FTS(data,metodo_part,mf_type,partition_parameters,order,diff):
         raise Exception("Method %s not implemented" % metodo_part)
         
         
-    IT2FS_plot(*modelo.dict_sets.values())
+    #IT2FS_plot(*modelo.dict_sets.values())
     
     '------------------------------------------------ Treinamento  ------------------------------------------'
         

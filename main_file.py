@@ -1,5 +1,5 @@
 from pyT2FTS.sliding_window import janela_deslizante
-from pyT2FTS.datasets import get_TAIEX
+from pyT2FTS.datasets import get_TAIEX,get_NASDAQ
 import numpy as np
 
 
@@ -7,31 +7,31 @@ import numpy as np
 '------------------------------------------------ Data set import -------------------------------------------------'
 
 taiex = get_TAIEX()
-data = taiex.avg               # Pega somente a última coluna de dados: a média (avg)
-data = data.to_numpy()      # Covnerte de panda dataframe para array numpy
+taiex = taiex.avg               # Pega somente a última coluna de dados: a média (avg)
+taiex = taiex.to_numpy()      # Covnerte de panda dataframe para array numpy
+
+
+nasdaq = get_NASDAQ()
+nasdaq = nasdaq.avg               # Pega somente a última coluna de dados: a média (avg)
+nasdaq = nasdaq.to_numpy()      # Covnerte de panda dataframe para array numpy
+
 
 '------------------------------------------------ Gridsearch Parameters -------------------------------------------------'
 
 
-ordens = [1]
-
-'particoes must be a list'
-#particoes = [10]
-particoes = np.arange(1,11)
-
-diff = 1
-
-#metodos: 'chen' 'soda' 'ADP' 'DBSCAN' 'CMEANS' 'entropy' 'FCM'  
-metodo_part = 'soda'   
-
-#usar 'triangular' ou 'trapezoidal' ou 'gaussian'
-mf_type = 'trapezoidal' 
+datasets = [taiex,nasdaq]
+dataset_names = ['TAIEX','NASDAQ']
+diff = 1                                   #Se diff = 1, diferencia os dados. Se diff = 0, não diferencia
+particoes = np.arange(3,15)                 #particoes deve ser uma lista
+ordens = [1,2]
+partitioners = ['SODA','ADP']            #partitioners: 'chen' 'SODA' 'ADP' 'DBSCAN' 'CMEANS' 'entropy' 'FCM'  
+mfs = ['trapezoidal','triangular']         #mfs: 'triangular' ou 'trapezoidal' ou 'gaussian'
 
 '------------------------------------------------ Running the model -------------------------------------------------'
 
 
 'Builds and runs the model'
-df_geral,df_especifico = janela_deslizante(data,diff,particoes,ordens,metodo_part,mf_type)
+janela_deslizante(datasets,dataset_names,diff,particoes,ordens,partitioners,mfs)
 
 
 
@@ -44,37 +44,6 @@ winsound.Beep(freq, duration)
 """
 
 
-
-
-
-"""
-
-from pyT2FTS.processo_completo import T2FTS
-from pyT2FTS.datasets import get_TAIEX,get_NASDAQ
-import matplotlib.pyplot as plt
-
-'------------------------------------------------ Data set import -------------------------------------------------'
-
-taiex = get_TAIEX()
-data = taiex.avg               # Pega somente a última coluna de dados: a média (avg)
-data = data.to_numpy()      # Covnerte de panda dataframe para array numpy
-
-'------------------------------------------------ Initial parameters -------------------------------------------------'
-
-'Define a ordem do sistema'
-order = 1
-
-'Define o número de conjuntos'
-numero_de_sets = 12
-
-'Se diff = 1, diferencia os dados. Se diff = 0, não diferencia'
-diff = 1
-
-metodo_part = 'FCM' 
-
-'Builds and runs the model'
-T2FTS(data,metodo_part,partition_parameters=numero_de_sets,order=order,diff=diff)
-"""
 
 
 

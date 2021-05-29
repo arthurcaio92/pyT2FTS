@@ -2229,7 +2229,7 @@ class Type2Model():
                                         
         dict_sets = {}   #Dicionário contendo os sets
         
-        if mf_type=='triangular':
+        if mf_type == 'triangular':
             
             'Descobre os pontos de início de cada conjunto'
             pontos_conj = []
@@ -2259,31 +2259,31 @@ class Type2Model():
                 nome = 'A%d'%x  #manda junto o nome do set para usar se precisar
                 dict_sets['A%d' %x] = FuzzySet(self.domain, tri_mf, [b_esq, topo_tri, b_dir, 1],tri_mf, [b_esq+fou_left, topo_tri, b_dir-fou_right, 0.9],nome = nome)
 
-        if mf_type=='trapezoidal':
+        if mf_type == 'trapezoidal':
             
-            'Descobre o centroide de cada conjunto'
-            centroides = []
             for x in range(1,self.numero_de_sets+1):
-                centroides.append(self.dominio_inf + (self.intervalo_entre_set*x))
-            
-            'Constroi os intervalos de cada set'
-            mf_params = []
-            for x in range(self.numero_de_sets):
-                aux = [centroides[x]-0.75*self.largura_set,centroides[x]-0.25*self.largura_set,centroides[x]+0.25*self.largura_set,centroides[x]+0.75*self.largura_set]
-                mf_params.append(aux)
                 
-            'Constroi cada set a medida que avança na lista de intervalos de conjuntos'
-            for x in range(1,self.numero_de_sets+1):
-                a,b1,b2,c = mf_params[x-1]
-     
-                fou_right = (c-b2)*0.4       #A mancha nao pode ser maior dos que os vertices do triangulo
-                fou_left = (b1-a)*0.4        #Calcula a mancha da esquerda e direita e pega a menor para valer para os dois
+                'Descobre o centroide de cada conjunto'
+                centroide = self.dominio_inf + (self.intervalo_entre_set*x)
+            
+                'Constroi os intervalos de cada set'
+                a  = centroide - 1.00 * self.intervalo_entre_set
+                b1 = centroide - 0.50 * self.intervalo_entre_set
+                b2 = centroide + 0.50 * self.intervalo_entre_set
+                c  = centroide + 1.00 * self.intervalo_entre_set
+                
+                'Cria as manchas de incerteza'
+                fou_right = (c - b2) * 0.4       #A mancha nao pode ser maior dos que os vertices do triangulo
+                fou_left  = (b1 - a) * 0.4        #Calcula a mancha da esquerda e direita e pega a menor para valer para os dois
                 
                 nome = 'A%d'%x  #manda junto o nome do set para usar se precisar
-                dict_sets['A%d' %x] = FuzzySet(self.domain, trapezoid_mf, [a, b1, b2, c, 1],trapezoid_mf, [a+fou_left, b1, b2, c-fou_right, 0.9],nome = nome)
+                dict_sets['A%d' %x] = FuzzySet(self.domain,
+                                               trapezoid_mf, [a, b1, b2, c, 1],
+                                               trapezoid_mf, [a+fou_left, b1, b2, c-fou_right, 0.9],
+                                               nome = nome)
 
-        if mf_type=='gaussian':
-            stdv = 30
+        if mf_type == 'gaussian':
+            stdv = self.intervalo_entre_set / 3
             
             'Descobre o centroide de cada conjunto'
             centroides = []
@@ -2291,7 +2291,7 @@ class Type2Model():
                 centroides.append(self.dominio_inf + (self.intervalo_entre_set*x))
             
                 nome = 'A%d'%x
-                dict_sets['A%d' %x] = FuzzySet(self.domain, gaussian_mf, [centroides[x-1], stdv, 1], gaussian_mf, [centroides[x-1], stdv*0.50, 0.75], nome = nome)
+                dict_sets['A%d' %x] = FuzzySet(self.domain, gaussian_mf, [centroides[x-1], stdv, 1], gaussian_mf, [centroides[x-1], stdv*0.50, 0.9], nome = nome)
     
                 
         self.dict_sets = dict_sets
@@ -2301,7 +2301,7 @@ class Type2Model():
     
     def generate_uneven_length_mfs(self,numero_de_sets,mf_type,mf_params): 
         """ 
-        Cria os conjuntos fuzzy SOBREPOSTOS recebendo parametros da função triangular
+        Cria os conjuntos fuzzy SOBREPOSTOS recebendo parametros da função DE PERTINENCIA
         
         :mf_params: Lista contendo os parâmetros da função de pertinência a ser utilizada
         """

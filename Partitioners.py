@@ -84,12 +84,12 @@ def conjuntos_cmeans(data, k, mf_type):
     from pyFTS.common import Membership #utilizado no argumento func
     
     if mf_type == 'triangular':
-        mf_type = Membership.trimf
-    elif mf_type == 'trapezoidal':
-        mf_type = Membership.trapmf
+        mf = Membership.trimf
+    if mf_type == 'trapezoidal':
+        mf = Membership.trapmf
     
     #Executa o particionamento e salva num objeto
-    obj = CMeans.CMeansPartitioner(data=data, npart=k, func=mf_type)
+    obj = CMeans.CMeansPartitioner(data=data, npart=k, func=mf)
     
     ##Lista para guardar os parâmetros da função de cada set    
     cmeans_params = []

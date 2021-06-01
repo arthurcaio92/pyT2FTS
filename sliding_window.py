@@ -27,8 +27,7 @@ def janela_deslizante(datasets,dataset_names,diff,particoes,ordens,partitioners,
 
     """
     
-    'Let''s measure the total elapsed time for the whole process to be completed'
-    start_time = time.time()
+    "Variavel auxiliar para saber o nome do dataset"
     name_index = 0
     
     for data in datasets:
@@ -36,18 +35,12 @@ def janela_deslizante(datasets,dataset_names,diff,particoes,ordens,partitioners,
         data_name = dataset_names[name_index]
         name_index = name_index + 1 #atualiza para o proximo loop
         
-        #print('data',data)
-        #print('dataset_names',data_name)
         
         for metodo_part in partitioners:
             
             for mf_type in mfs:
-                
-                print("data",data)
-                print("metodo",metodo_part)
-                print("mf_type",mf_type)
-                
-                
+
+              
                 'Verificações'
                 
                 'Se alguma dessas situações ocorrer, ignora esse loop do for e passa para o próximo'
@@ -60,8 +53,8 @@ def janela_deslizante(datasets,dataset_names,diff,particoes,ordens,partitioners,
                     print(metodo_part," does not support ",mf_type," membership function")
                     continue
                 
-                
-                
+                'Let''s measure the total elapsed time for the whole process to be completed'
+                start_time = time.time()
     
                 'Indicates the percentage of the windowsize to move the window'
                 increment = 0.2  

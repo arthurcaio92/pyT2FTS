@@ -1,5 +1,5 @@
 from pyT2FTS.sliding_window import janela_deslizante
-from pyT2FTS.datasets import get_TAIEX,get_NASDAQ
+from pyT2FTS.datasets import get_TAIEX,get_NASDAQ,get_Brent_Oil
 import numpy as np
 
 
@@ -7,13 +7,18 @@ import numpy as np
 '------------------------------------------------ Data set import -------------------------------------------------'
 
 taiex = get_TAIEX()
-taiex = taiex.avg               # Pega somente a última coluna de dados: a média (avg)
-taiex = taiex.to_numpy()      # Covnerte de panda dataframe para array numpy
+taiex = taiex.avg               
+taiex = taiex.to_numpy()      
 
 
 nasdaq = get_NASDAQ()
-nasdaq = nasdaq.avg               # Pega somente a última coluna de dados: a média (avg)
-nasdaq = nasdaq.to_numpy()      # Covnerte de panda dataframe para array numpy
+nasdaq = nasdaq.avg               
+nasdaq = nasdaq.to_numpy()      
+
+
+df_brent_oil = get_Brent_Oil()
+brent_oil = df_brent_oil.Price  
+brent_oil = brent_oil.to_numpy()
 
 
 '------------------------------------------------ Gridsearch Parameters -------------------------------------------------'

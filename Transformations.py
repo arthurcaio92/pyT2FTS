@@ -1,16 +1,10 @@
-<<<<<<< HEAD
 # -*- coding: utf-8 -*-
-=======
->>>>>>> f983be4b3a672a40fc0708c2377770347e7eee84
 """
 Common data transformation used on pre and post processing of the FTS
 """
 
-<<<<<<< HEAD
 "Transformações"
 
-=======
->>>>>>> f983be4b3a672a40fc0708c2377770347e7eee84
 import numpy as np
 import math
 #from pyFTS import *

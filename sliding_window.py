@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 # -*- coding: utf-8 -*-
-=======
->>>>>>> f983be4b3a672a40fc0708c2377770347e7eee84
 import pandas as pd
 import numpy as np
 from pyT2FTS.processo_completo import T2FTS

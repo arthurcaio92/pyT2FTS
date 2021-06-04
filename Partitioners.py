@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 # -*- coding: utf-8 -*-
-=======
->>>>>>> f983be4b3a672a40fc0708c2377770347e7eee84
 from pandas import DataFrame
 
   
@@ -97,21 +94,12 @@ def conjuntos_cmeans(data, k, mf_type):
     
     ##Lista para guardar os parâmetros da função de cada set    
     cmeans_params = []
-<<<<<<< HEAD
     for i in range(1,k+1):
         cmeans_params.append(obj.sets['A'+str(i)].parameters)
     
     return cmeans_params
 
 def conjuntos_entropy(data, k, mf_type):
-=======
-    for k in range(1,k+1):
-        cmeans_params.append(obj.sets['A'+str(k)].parameters)
-    
-    return cmeans_params
-
-def conjuntos_entropy(data, mf_type):
->>>>>>> f983be4b3a672a40fc0708c2377770347e7eee84
     from pyFTS.partitioners import Entropy
     from pyFTS.common import Membership
     
@@ -121,28 +109,16 @@ def conjuntos_entropy(data, mf_type):
         mf_type = Membership.trapmf
 
     #Executa o particionamento e salva num objeto
-<<<<<<< HEAD
     obj = Entropy.EntropyPartitioner(data=data, npart=k, func=mf_type)
     
     ##Lista para guardar os parâmetros da função de cada set
     entropy_params = []
     for i in range(0,len(obj.sets)):
-=======
-    obj = Entropy.EntropyPartitioner(data=data, func=mf_type)
-    
-    ##Lista para guardar os parâmetros da função de cada set
-    entropy_params = []
-    for i in range(1,len(obj.sets)+1):
->>>>>>> f983be4b3a672a40fc0708c2377770347e7eee84
         entropy_params.append(obj.sets['A'+str(i)].parameters)
     
     return entropy_params
 
-<<<<<<< HEAD
 def conjuntos_fcm(data,k, mf_type):
-=======
-def conjuntos_fcm(data, mf_type):
->>>>>>> f983be4b3a672a40fc0708c2377770347e7eee84
     from pyFTS.partitioners import FCM
     from pyFTS.common import Membership
     
@@ -152,11 +128,7 @@ def conjuntos_fcm(data, mf_type):
         mf_type = Membership.trapmf
     
     #Executa o particionamento e salva num objeto
-<<<<<<< HEAD
     obj = FCM.FCMPartitioner(data=data, npart=k,func=mf_type)   
-=======
-    obj = FCM.FCMPartitioner(data=data, func=mf_type)
->>>>>>> f983be4b3a672a40fc0708c2377770347e7eee84
     
     ##Lista para guardar os parâmetros da função de cada set
     fcm_params = []

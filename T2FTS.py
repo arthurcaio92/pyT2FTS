@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 # -*- coding: utf-8 -*-
-=======
->>>>>>> f983be4b3a672a40fc0708c2377770347e7eee84
 from numpy import exp, ones_like, zeros_like, arange, multiply, \
      subtract, add, minimum, maximum, sign, c_, argmax, \
      array, where

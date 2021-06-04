@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 # -*- coding: utf-8 -*-
-=======
->>>>>>> f983be4b3a672a40fc0708c2377770347e7eee84
 # Copyright 2018, Xiaowei Gu and Plamen P. Angelov
 
 #PLEASE READ

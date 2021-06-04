@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 # -*- coding: utf-8 -*-
-=======
-
->>>>>>> f983be4b3a672a40fc0708c2377770347e7eee84
 from pyT2FTS.T2FTS import Type2Model,IT2FS_plot
 from pyT2FTS.ferramentas import metricas_erro,plotar_previsao  #biblioteca com funcoes uteis para sistema fuzzy
 from pyT2FTS.Partitioners import conjuntos_soda,conjuntos_adp,conjuntos_dbscan,conjuntos_cmeans,conjuntos_entropy,conjuntos_fcm,conjuntos_huarng
@@ -76,22 +72,14 @@ def T2FTS(data,metodo_part,mf_type,partition_parameters,order,diff):
         modelo.generate_uneven_length_mfs(numero_de_sets, mf_type, cmeans_params)
     
     elif metodo_part == 'entropy':
-<<<<<<< HEAD
         k = partition_parameters
         entropy_params = conjuntos_entropy(treino,k, mf_type)
-=======
-        entropy_params = conjuntos_entropy(treino, mf_type)
->>>>>>> f983be4b3a672a40fc0708c2377770347e7eee84
         numero_de_sets = len(entropy_params)
         modelo.generate_uneven_length_mfs(numero_de_sets, mf_type, entropy_params)
         
     elif metodo_part == 'FCM':
-<<<<<<< HEAD
         k = partition_parameters
         fcm_params = conjuntos_fcm(treino,k, mf_type)
-=======
-        fcm_params = conjuntos_fcm(treino, mf_type)
->>>>>>> f983be4b3a672a40fc0708c2377770347e7eee84
         numero_de_sets = len(fcm_params)
         modelo.generate_uneven_length_mfs(numero_de_sets, mf_type, fcm_params)
     
@@ -104,11 +92,7 @@ def T2FTS(data,metodo_part,mf_type,partition_parameters,order,diff):
         raise Exception("Method %s not implemented" % metodo_part)
         
         
-<<<<<<< HEAD
     IT2FS_plot(*modelo.dict_sets.values())
-=======
-    #IT2FS_plot(*modelo.dict_sets.values())
->>>>>>> f983be4b3a672a40fc0708c2377770347e7eee84
     
     '------------------------------------------------ Treinamento  ------------------------------------------'
         

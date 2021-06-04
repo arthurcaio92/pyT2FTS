@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # -*- coding: utf-8 -*-
 """
 Distacias
@@ -10,6 +11,19 @@ minkowski - generalizacao de outras distancias:
     p = 2  a  euclidean,
     p =  a  chebyshev.
 canberra - versao com pesos da cityblock, sensivel para pontos proximos a origem
+=======
+"""
+Distâncias
+euclidean - linha reta entre os pontos
+mahalanobis - correlação entre as variaveis (determina similaridade)
+cityblock - distancia das projeções dos pontos (taxicab/manhattan)
+chebyshev - maior distancia entre as coordenadas (rei)
+minkowski - generalização de outras distâncias:
+    p = 1  →  cityblock,
+    p = 2  →  euclidean,
+    p =  ∞   →  chebyshev.
+canberra - versão com pesos da cityblock, sensivel para pontos proximos à origem
+>>>>>>> f983be4b3a672a40fc0708c2377770347e7eee84
 
 """
     
@@ -199,7 +213,11 @@ def cloud_member_recruitment(ModelNumber,Center_samples,Uniquesample,grid_trad,g
 
 def plotar_soda(data,output):
     
+<<<<<<< HEAD
     soda_idx = output['IDX'] #lista com as associacoes de conjuntos de cada amostra da serie
+=======
+    soda_idx = output['IDX'] #lista com as associa��es de conjuntos de cada amostra da serie
+>>>>>>> f983be4b3a672a40fc0708c2377770347e7eee84
     centros = output['C']
 
     
@@ -226,7 +244,11 @@ def plotar_soda(data,output):
       
     #plt.figure(figsize=(10,5))
     
+<<<<<<< HEAD
     #Para usar mais cores na representacao
+=======
+    #Para usar mais cores na representa��o
+>>>>>>> f983be4b3a672a40fc0708c2377770347e7eee84
     import matplotlib.colors as mcolors    
     cores_basicas = mcolors.BASE_COLORS
     colors1 = list(cores_basicas.values())
@@ -235,7 +257,11 @@ def plotar_soda(data,output):
     colors = colors1[:-2] + colors2[10:60]
 
     
+<<<<<<< HEAD
     #Plota os graficos um de cada vez
+=======
+    #PLota os graficos um de cada vez
+>>>>>>> f983be4b3a672a40fc0708c2377770347e7eee84
     for i in range(len(result)):
     
         auxiliar = [data2[x]*result[i][x] for x in range(len(data2)) ]

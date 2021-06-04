@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # -*- coding: utf-8 -*-
+=======
+
+>>>>>>> f983be4b3a672a40fc0708c2377770347e7eee84
 from pyT2FTS.pyT2FTS import Type2Model,IT2FS_plot
 from pyT2FTS.ferramentas import conjuntos_soda,metricas_erro,plotar_previsao  #biblioteca com funcoes uteis para sistema fuzzy
 from pyFTS.common import Transformations

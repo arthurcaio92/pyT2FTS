@@ -1,11 +1,17 @@
+<<<<<<< HEAD
 # -*- coding: utf-8 -*-
+=======
+>>>>>>> f983be4b3a672a40fc0708c2377770347e7eee84
 import pandas as pd
 import numpy as np
 from pathlib import Path
 from urllib import request
 
+<<<<<<< HEAD
 #Datasets para previsão
 
+=======
+>>>>>>> f983be4b3a672a40fc0708c2377770347e7eee84
 
 
 def get_dataframe(filename, url, sep=";", compression='infer'):

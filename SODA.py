@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-Distacias
+Distancias
 euclidean - linha reta entre os pontos
 mahalanobis - correlacao entre as variaveis (determina similaridade)
 cityblock - distancia das projecoes dos pontos (taxicab/manhattan)
 chebyshev - maior distancia entre as coordenadas (rei)
 minkowski - generalizacao de outras distancias:
-    p = 1  a  cityblock,
-    p = 2  a  euclidean,
-    p =  a  chebyshev.
+    p = 1  -  cityblock,
+    p = 2  -  euclidean,
+    p = infinite - chebyshev.
 canberra - versao com pesos da cityblock, sensivel para pontos proximos a origem
 
 """
@@ -326,6 +326,9 @@ def SODA_function(dados, gridsize):
     data = np.matrix(dados)
 
     distances = ['euclidean'];
+    
+    
+    print("aaaa", data)
             
 
     for d in distances:

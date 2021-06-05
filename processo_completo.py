@@ -92,7 +92,7 @@ def T2FTS(data,metodo_part,mf_type,partition_parameters,order,diff):
         raise Exception("Method %s not implemented" % metodo_part)
         
         
-    IT2FS_plot(*modelo.dict_sets.values())
+    #IT2FS_plot(*modelo.dict_sets.values())
     
     '------------------------------------------------ Treinamento  ------------------------------------------'
         
@@ -106,7 +106,7 @@ def T2FTS(data,metodo_part,mf_type,partition_parameters,order,diff):
      
     #teste[153] = 15.92
     
-    print("Começando o teste...")
+    print("Começandoooooooo o teste...")
     print("Particionamento:",metodo_part,"| N. de conjuntos:", numero_de_sets, "| Ordem:", order)
     print("")
     resultado_processo = modelo.predict(teste)   #A lista com as previsoes da janela do momento sao retornadas para esta variavel

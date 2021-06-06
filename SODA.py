@@ -189,9 +189,10 @@ def cloud_member_recruitment(ModelNumber,Center_samples,Uniquesample,grid_trad,g
                 seq.append(j)
         Count.append(len(seq))
         Membership[:Count[i]:,i] = seq
-        for j in seq:
-            Members[:Count[i]:,W*i:W*(i+1)] = Uniquesample[j]
-        #Members[:Count[i]:,W*i:W*(i+1)] = [Uniquesample[j] for j in seq]
+        'Aqui mudei o list comprehension para o for loop e funcionou'
+        #for j in seq:
+            #Members[:Count[i]:,W*i:W*(i+1)] = Uniquesample[j]
+        Members[:Count[i]:,W*i:W*(i+1)] = [Uniquesample[j] for j in seq]
     MemberNumber = Count
     
     #Converte a matriz para vetor E SOMA +1 PARA NAO TER CONJUNTO 0'

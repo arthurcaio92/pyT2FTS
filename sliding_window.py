@@ -28,6 +28,11 @@ def janela_deslizante(datasets,dataset_names,diff,particoes,ordens,partitioners,
 
     """
     
+    'Checks if the right number and datasets and their names was provided'
+    if len(datasets) != len(dataset_names):
+        raise Exception("Please specify the correct number of datasets and their names")
+        
+    
     "Variavel auxiliar para saber o nome do dataset"
     name_index = 0
     

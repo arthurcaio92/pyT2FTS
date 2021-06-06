@@ -20,6 +20,11 @@ def get_dataframe(filename, url, sep=";", compression='infer'):
     :return:  Pandas dataset
     """
 
+    request.urlretrieve(url, filename)
+    return pd.read_csv(filename, sep=sep, compression=compression)
+
+    """
+
     tmp_file = Path(filename)
 
     if tmp_file.is_file():
@@ -27,6 +32,7 @@ def get_dataframe(filename, url, sep=";", compression='infer'):
     else:
         request.urlretrieve(url, filename)
         return pd.read_csv(filename, sep=sep, compression=compression)
+    """
 
 
 

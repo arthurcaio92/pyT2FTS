@@ -103,10 +103,8 @@ def T2FTS(data,metodo_part,mf_type,partition_parameters,order,diff):
     'Clipa os dados para estarem dentro do universo de discurso'
     teste = np.clip(teste, modelo.dominio_inf+1, modelo.dominio_sup-1)
 
-     
-    #teste[153] = 15.92
     
-    print("Começandoooooooo o teste...")
+    print("Começando o teste...")
     print("Particionamento:",metodo_part,"| N. de conjuntos:", numero_de_sets, "| Ordem:", order)
     print("")
     resultado_processo = modelo.predict(teste)   #A lista com as previsoes da janela do momento sao retornadas para esta variavel

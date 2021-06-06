@@ -25,13 +25,13 @@ brent_oil = brent_oil.to_numpy()
 '------------------------------------------------ Gridsearch Parameters -------------------------------------------------'
 
 
-datasets = [taiex,nasdaq]
-dataset_names = ['TAIEX','NASDAQ']
+datasets = [taiex]
+dataset_names = ['TAIEX']
 diff = 1                                   #Se diff = 1, diferencia os dados. Se diff = 0, não diferencia
-particoes = np.arange(3,15)                 #particoes deve ser uma lista
-ordens = [1,2]
-partitioners = ['SODA','ADP']            #partitioners: 'chen' 'SODA' 'ADP' 'DBSCAN' 'CMEANS' 'entropy' 'FCM'  
-mfs = ['triangular','triangular']         #mfs: 'triangular' ou 'trapezoidal' ou 'gaussian'
+particoes = np.arange(1,11)                 #particoes deve ser uma lista
+ordens = [1]
+partitioners = ['SODA']            #partitioners: 'chen' 'SODA' 'ADP' 'DBSCAN' 'CMEANS' 'entropy' 'FCM'  
+mfs = ['triangular']         #mfs: 'triangular' ou 'trapezoidal' ou 'gaussian'
 
 '------------------------------------------------ Running the model -------------------------------------------------'
 

@@ -254,7 +254,7 @@ def janela_deslizante(datasets,dataset_names,diff,particoes,ordens,partitioners,
                             print("[",r,"]:",avg_rmse)
                             print("---------------------------------")
             
-                        elif metodo_part == 'soda' or metodo_part == 'ADP': 
+                        elif metodo_part == 'SODA' or metodo_part == 'ADP': 
                             r = "RMSE Médio - Gridsize: " + str(gridsize) + ", ordem: " + str(order)
                             print("[",r,"]:",avg_rmse)
                             print("---------------------------------")

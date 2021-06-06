@@ -7,25 +7,22 @@ import numpy as np
 
 '------------------------------------------------ Data set import -------------------------------------------------'
 
-taiex = get_TAIEX()
-taiex = taiex.avg               
-taiex = taiex.to_numpy()      
+taiex_df = get_TAIEX()
+taiex = taiex_df.avg               
+taiex = taiex.to_numpy()  
 
-
-nasdaq = get_NASDAQ()
-nasdaq = nasdaq.avg               
-nasdaq = nasdaq.to_numpy()      
+nasdaq_df = get_NASDAQ()
+nasdaq = nasdaq_df.avg               
+nasdaq = nasdaq.to_numpy()    
 
 sp500_df = get_SP500()
-sp500 = sp500_df.Avg               # Pega somente a última coluna de dados: a média (avg)
+sp500 = sp500_df.Avg               
 sp500 = sp500[11500:16000]
-sp500 = sp500.to_numpy()      # Covnerte de panda dataframe para array numpy
+sp500 = sp500.to_numpy()     
 
-"""
 df_brent_oil = get_Brent_Oil()
 brent_oil = df_brent_oil.Price  
 brent_oil = brent_oil.to_numpy()
-"""
 
 '------------------------------------------------ Gridsearch Parameters -------------------------------------------------'
 

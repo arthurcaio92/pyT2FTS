@@ -189,7 +189,7 @@ def cloud_member_recruitment(ModelNumber,Center_samples,Uniquesample,grid_trad,g
                 seq.append(j)
         Count.append(len(seq))
         Membership[:Count[i]:,i] = seq
-        'Aqui mudei o list comprehension para o for loop e funcionou'
+        'formato list comprehension so funciona para numpy < 1.18.5'
         #for j in seq:
             #Members[:Count[i]:,W*i:W*(i+1)] = Uniquesample[j]
         Members[:Count[i]:,W*i:W*(i+1)] = [Uniquesample[j] for j in seq]

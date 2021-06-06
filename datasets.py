@@ -36,6 +36,7 @@ def get_dataframe(filename, url, sep=";", compression='infer'):
 
 
 
+
 def get_TAIEX():
     """
     Get the complete multivariate time series data.
@@ -55,7 +56,7 @@ def get_NASDAQ():
 
     :return: Pandas DataFrame
     """
-    dat = get_dataframe('TAIEX.csv.zip',
+    dat = get_dataframe('NASDAQ.csv.zip',
                                'https://github.com/arthurcaio92/pyT2FTS/raw/main/data/NASDAQ.zip',
                                sep=",", compression='zip')
     dat["Date"] = pd.to_datetime(dat["Date"])
@@ -68,7 +69,7 @@ def get_SP500():
 
     :return: Pandas DataFrame
     """
-    dat = get_dataframe('TAIEX.csv.zip',
+    dat = get_dataframe('SP500.csv.zip',
                                'https://github.com/arthurcaio92/pyT2FTS/raw/main/data/SP500.zip',
                                sep=",", compression='zip')
     dat["Date"] = pd.to_datetime(dat["Date"])
@@ -81,7 +82,7 @@ def get_Brent_Oil():
 
     :return: Pandas DataFrame
     """
-    dat = get_dataframe('TAIEX.csv.zip',
+    dat = get_dataframe('Brent-Oil.csv.zip',
                                'https://github.com/arthurcaio92/pyT2FTS/raw/main/data/Brent-Oil.zip',
                                sep=",", compression='zip')
     #dat["Date"] = pd.to_datetime(dat["Date"])

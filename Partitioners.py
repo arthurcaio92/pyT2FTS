@@ -49,6 +49,8 @@ def conjuntos_adp(data,gridsize, distancetype='chebyshev'):
 def conjuntos_dbscan(data, eps):
     from sklearn.cluster import DBSCAN
     
+    print("Parâmetro:",eps )
+    
     #Transforma a base de treinos em um array 2D
     dados = DataFrame(data, columns = ['avg'])
     dados.insert(0, '#', range(1,len(dados)+1))
@@ -84,6 +86,8 @@ def conjuntos_cmeans(data, k, mf_type):
     from pyFTS.partitioners import CMeans
     from pyFTS.common import Membership #utilizado no argumento func
     
+    print("Parâmetro:",k )
+    
     if mf_type == 'triangular':
         mf = Membership.trimf
     if mf_type == 'trapezoidal':
@@ -103,6 +107,8 @@ def conjuntos_entropy(data, k, mf_type):
     from pyFTS.partitioners import Entropy
     from pyFTS.common import Membership
     
+    print("Parâmetro:",k )
+    
     if mf_type == 'triangular':
         mf_type = Membership.trimf
     elif mf_type == 'trapezoidal':
@@ -121,6 +127,8 @@ def conjuntos_entropy(data, k, mf_type):
 def conjuntos_fcm(data,k, mf_type):
     from pyFTS.partitioners import FCM
     from pyFTS.common import Membership
+    
+    print("Parâmetro:",k )
     
     if mf_type == 'triangular':
         mf_type = Membership.trimf

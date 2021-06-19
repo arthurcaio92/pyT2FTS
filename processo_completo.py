@@ -22,7 +22,7 @@ def T2FTS(data,metodo_part,mf_type,partition_parameters,order,diff):
     '------------------------------------------------Definição dos intervalos ------------------------------------------'
     
     'Treinamento correponde a 80% do total de dados '
-    intervalo_treino = int(0.8 * len(data))         
+    intervalo_treino = int(0.9 * len(data))         
      
     treino = data[:intervalo_treino]
   

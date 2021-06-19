@@ -8,7 +8,7 @@ def conjuntos_soda(data,gridsize):
     
     """Retorna apenas o numero de conjuntos encontrado pelo SODA"""
     
-    print("Gridsize:",gridsize )
+    print("Gridsize:",gridsize)
     
     from pyT2FTS.SODA import SODA_function 
     

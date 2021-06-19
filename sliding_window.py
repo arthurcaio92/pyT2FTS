@@ -125,6 +125,7 @@ def janela_deslizante(datasets,dataset_names,diff,particoes,ordens,partitioners,
                             
                             dados = data[janela_inf:janela_sup]
                             print("Dados: [", janela_inf, ":",janela_sup,"]")
+                            print("MF:",mf_type)
                         
                             '------------------------------------------------ Confirgurações da janela -------------------------------------------------'
                 

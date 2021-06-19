@@ -715,8 +715,8 @@ class FuzzySet(object):
         plt.xticks(fontsize=18)
         plt.yticks(fontsize=18)
         plt.grid(True)
-        plt.xlabel("Universo de Discurso",fontsize=18)
-        plt.ylabel("Grau de pertinência",fontsize=18)
+        plt.xlabel("Universe of Discourse",fontsize=18)
+        plt.ylabel("Membership Degree",fontsize=18)
         if filename is not None:
             plt.savefig(filename + ".pdf", format="pdf", dpi=300, bbox_inches="tight")
         plt.show()
@@ -954,14 +954,16 @@ def IT2FS_plot(*sets, title=None, legends=None, filename=None):
     #plt.xlabel("Universe of Discourse",fontsize=25)
     #plt.ylabel("Degree of Membership",fontsize=25)
     
-    plt.xlabel("Universo de Discurso",fontsize=25)
-    plt.ylabel("Grau de pertinência",fontsize=25)
+    plt.xlabel("Universe of Discourse",fontsize=25)
+    plt.ylabel("Membership Degree",fontsize=25)
     plt.xticks(fontsize=25)
     plt.yticks(fontsize=25)
     plt.grid(False)
     if filename is not None:
         plt.savefig(filename + ".pdf", format="pdf", dpi=300, bbox_inches="tight")
     plt.show()
+    
+    
     
 def TR_plot(domain, tr, title=None, legend=None, filename=None):
     """

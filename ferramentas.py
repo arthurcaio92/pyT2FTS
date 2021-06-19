@@ -545,3 +545,40 @@ def mape_function(teste,previsao):
         previsao = np.array(previsao)
     return np.nanmean(np.abs(np.divide(np.subtract(teste, previsao), teste))) * 100
 
+
+
+def plot_dataset(dataset,xlabel,ylabel):
+    """
+    Use this function to plot a dataset for papers
+    
+    """
+    
+    plt.figure()
+    plt.figure(figsize=(16,6))
+    plt.plot(dataset)
+    plt.yticks(fontsize=16) 
+    plt.xticks(fontsize=16)
+    plt.xlabel(xlabel,fontsize=20)
+    plt.ylabel(ylabel,fontsize=20)
+    #plt.axvline(x=4208, color = "red")
+    plt.savefig("dataset_plotted.png", format="png", dpi=300, bbox_inches="tight")
+    
+    
+def plot_partitions(dataset):
+    
+    
+    
+    datasets = [dataset]
+    dataset_names = ['DATASET']
+    diff = 1                                   #Se diff = 1, diferencia os dados. Se diff = 0, não diferencia
+    particoes = np.arange(8,11)                 #particoes deve ser uma lista
+    ordens = [2]
+    partitioners = ['FCM']            #partitioners: 'chen' 'SODA' 'ADP' 'DBSCAN' 'CMEANS' 'entropy' 'FCM'  
+    mfs = ['triangular']         #mfs: 'triangular' ou 'trapezoidal' ou 'gaussian'
+    
+    '------------------------------------------------ Running the model -------------------------------------------------'
+    
+    
+    'Builds and runs the model'
+    #janela_deslizante(datasets,dataset_names,diff,particoes,ordens,partitioners,mfs)
+

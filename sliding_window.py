@@ -6,7 +6,7 @@ import pickle #To save the data as the process goes
 import time
 
     
-def janela_deslizante(datasets,dataset_names,diff,particoes,ordens,partitioners,mfs):
+def run_sliding_window(datasets,dataset_names,diff,particoes,ordens,partitioners,mfs):
     
     """Realiza a janela deslizante sobre um conjunto de dados.
     Tamanho da janela padrão é de 1000 amostras.
@@ -111,23 +111,23 @@ def janela_deslizante(datasets,dataset_names,diff,particoes,ordens,partitioners,
                     
                         '------------------------------------------------ Janela deslizante -------------------------------------------------'
                            
-                        #tamanho_janela = int(0.2*len(data))      #Tamanho da janela deslizante
-                        tamanho_janela = 1000
+                        #window_size = int(0.2*len(data))      #Tamanho da janela deslizante
+                        window_size = 1000
                         
-                        janela_inf = 0
-                        janela_sup = tamanho_janela
+                        window_inf = 0
+                        window_sup = window_size
                         
                         'Let''s measure the METHOD elapsed time '
                         method_start_time = time.time()
                         
                         
-                        while (janela_sup <= len(data)):
+                        while (window_sup <= len(data)):
                             
-                            dados = data[janela_inf:janela_sup]
-                            print("Dados: [", janela_inf, ":",janela_sup,"]")
+                            dados = data[window_inf:window_sup]
+                            print("Window: [", window_inf, ":",window_sup,"]")
                             print("MF:",mf_type)
                         
-                            '------------------------------------------------ Confirgurações da janela -------------------------------------------------'
+                            '------------------------------------------------ Window setup -------------------------------------------------'
                 
                             'Define a ordem do sistema'
                             order = lag
@@ -152,7 +152,7 @@ def janela_deslizante(datasets,dataset_names,diff,particoes,ordens,partitioners,
                             erros_geral['Gridsize'].append(gridsize)                
                             erros_geral['Particoes'].append(n_sets)
                             erros_geral['Ordem'].append(order)
-                            erros_geral['Janela'].append("{}:{}".format(janela_inf,janela_sup))
+                            erros_geral['Janela'].append("{}:{}".format(window_inf,window_sup))
             
                             erros_geral['UDETHEIL'].append(lista_erros[0])
                             erros_geral['MAPE'].append(lista_erros[1])
@@ -166,11 +166,11 @@ def janela_deslizante(datasets,dataset_names,diff,particoes,ordens,partitioners,
                             erros_geral['FLRG'].append(FLRG)
                            
                             'Desliza a janela'
-                            janela_inf = janela_inf+200
-                            janela_sup = janela_sup+200
+                            window_inf = window_inf+200
+                            window_sup = window_sup+200
                             
-                            #janela_inf = int(janela_inf + tamanho_janela * increment)
-                            #janela_sup = int(janela_sup + tamanho_janela * increment)
+                            #window_inf = int(window_inf + window_size * increment)
+                            #window_sup = int(window_sup + window_size * increment)
                             
                         
                         'Ends time measurement'

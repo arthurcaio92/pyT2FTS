@@ -903,8 +903,11 @@ def L_IT2FS_Gaussian_UncertStd(domain, params):
                   [params[0], stdl, stdr, params[3]])
 
 
-def IT2FS_plot(*sets, title=None, legends=None, filename=None):
+def IT2FS_plot_antigo(*sets, title=None, legends=None, filename=None):
     """
+    
+    FUNCAO ANTES DE PLOTAR COM NOME DO SET: A1, A2, A4....
+    
     Plots multiple IT2FSs together in the same figure.
     
     Parameters
@@ -940,8 +943,11 @@ def IT2FS_plot(*sets, title=None, legends=None, filename=None):
     >>> IT2FS_plot(it2fs1, it2fs2, title="Plotting IT2FSs", 
                    legends=["First set", "Second set"])
     """
+    centroids = []
+    centroids_names = []
     'para gerar graficos maiores:'
-    plt.figure(figsize=(15,5))
+    #antes era 15,5
+    plt.figure(figsize=(30,5))
     for it2fs in sets:
         plt.fill_between(it2fs.domain, it2fs.upper, it2fs.lower,alpha=0.5)
     if legends is not None:
@@ -949,6 +955,8 @@ def IT2FS_plot(*sets, title=None, legends=None, filename=None):
     for it2fs in sets:
         plt.plot(it2fs.domain, it2fs.lower, color="black")
         plt.plot(it2fs.domain, it2fs.upper, color="black")
+        centroids.append(it2fs.umf_params[1])
+        centroids_names.append(it2fs.nome)
     if title is not None:
         plt.title(title)
     #plt.xlabel("Universe of Discourse",fontsize=25)
@@ -956,11 +964,77 @@ def IT2FS_plot(*sets, title=None, legends=None, filename=None):
     
     plt.xlabel("Universe of Discourse",fontsize=25)
     plt.ylabel("Membership Degree",fontsize=25)
-    plt.xticks(fontsize=25)
+    plt.xticks(centroids,fontsize=25)
     plt.yticks(fontsize=25)
     plt.grid(False)
     if filename is not None:
         plt.savefig(filename + ".pdf", format="pdf", dpi=300, bbox_inches="tight")
+    plt.show()
+    
+    
+def IT2FS_plot(*sets, title=None, legends=None, filename=None):
+    """
+    Plots multiple IT2FSs together in the same figure.
+    
+    Parameters
+    ----------
+    *sets:
+        Multiple number of IT2FSs which would be plotted.
+    
+    title:
+        str
+        
+        If it is set, it indicates the title which would be 
+        represented in the plot. If it is not set, the plot would not 
+        have a title.
+        
+    legends:
+        List of strs
+        
+        List of legend texts to be presented in plot. If it is not 
+        set, no legend would be in plot.
+        
+    filename:
+        str
+        
+        If it is set, the plot would be saved as a filename + ".pdf" 
+        file.
+        
+    Examples
+    --------
+    
+    >>> domain = linspace(0., 1., 100)
+    >>> it2fs1 = IT2FS_Gaussian_UncertStd(domain, [0.33, 0.2, 0.05])
+    >>> it2fs2 = IT2FS_Gaussian_UncertStd(domain, [0.66, 0.2, 0.05])
+    >>> IT2FS_plot(it2fs1, it2fs2, title="Plotting IT2FSs", 
+                   legends=["First set", "Second set"])   round(s.centroid, 0))z
+    """
+    
+    
+    centroids = [] #store mfs center points for ticks in x-axis
+    centroids_names = []   #store  mfs names for x-axis ticks
+    
+    'para gerar graficos maiores:'
+    fig, ax = plt.subplots(figsize=(25,5))  #antes era 15,5
+
+    for it2fs in sets:
+        ax.fill_between(it2fs.domain, it2fs.upper, it2fs.lower,alpha=0.5)
+    if legends is not None:
+        ax.legend(legends)
+    for it2fs in sets:
+        ax.plot(it2fs.domain, it2fs.lower, color="black")
+        ax.plot(it2fs.domain, it2fs.upper, color="black")
+        centroids.append(it2fs.umf_params[1])
+        centroids_names.append(str(int(it2fs.umf_params[1])) + '\n' + it2fs.nome)
+    if title is not None:
+        ax.set_title(title,fontsize=25)
+    ax.set_xlabel("Universe of Discourse",fontsize=25)
+    ax.set_ylabel("Membership Degree",fontsize=25)
+    ax.set_xticks(centroids)
+    ax.set_xticklabels(centroids_names)
+    ax.xaxis.set_tick_params(labelsize=20)
+    ax.yaxis.set_tick_params(labelsize=20)
+    ax.grid(False)
     plt.show()
     
     
@@ -2259,7 +2333,7 @@ class Type2Model():
                 fou_left = (topo_tri-b_esq)*0.4        #Calcula a mancha da esquerda e direita e pega a menor para valer para os dois
                 #fou = min(fou_left,fou_right)
                 
-                nome = 'A%d'%x  #manda junto o nome do set para usar se precisar
+                nome = 'Ã%d'%x  #manda junto o nome do set para usar se precisar
                 dict_sets['A%d' %x] = FuzzySet(self.domain, tri_mf, [b_esq, topo_tri, b_dir, 1],tri_mf, [b_esq+fou_left, topo_tri, b_dir-fou_right, 0.9],nome = nome)
 
         if mf_type == 'trapezoidal':
@@ -2417,7 +2491,7 @@ class Type2Model():
         OBS: uma outra alternativa é pegar os limites dos conjuntos criados e analisar
         onde o valor de treinamento está baseado nisso.ex: a1 = [2,4,6], a2=[4,6,8].
         lembre-se de criar um array que cobre todos os valores do triangulo e ordene do
-        menor para o maior.
+        menor para o maior. NÃO ESTOU USANDO ISSO
         
         """
         treino = self.training_data
@@ -2486,7 +2560,7 @@ class Type2Model():
                     lista_regras.append(x)   #lista de 3-tuples contendo as regras
                     
                     
-        print("Número de regras: ", len(lista_regras))
+        print("Number of rules: ", len(lista_regras))
         
         self.number_rules = len(lista_regras)
         
@@ -2576,7 +2650,7 @@ class Type2Model():
                 else:
                     flrg[ant3,ant2,ant1] = [cons]    #If it does not, we create the new FLRG
         
-        
+
         'Retorna o numero de fuzzy logical relationships - FLR and flr groups - FLRG'
         return len(lista_regras),len(flrg)
             

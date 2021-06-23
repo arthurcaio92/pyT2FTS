@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from pyT2FTS.T2FTS import Type2Model,IT2FS_plot
-from pyT2FTS.ferramentas import metricas_erro,plotar_previsao  #biblioteca com funcoes uteis para sistema fuzzy
+from pyT2FTS.ferramentas import metricas_erro,plotar_previsao 
 from pyT2FTS.Partitioners import conjuntos_soda,conjuntos_adp,conjuntos_dbscan,conjuntos_cmeans,conjuntos_entropy,conjuntos_fcm,conjuntos_huarng
 from pyT2FTS.Transformations import Differential
 import numpy as np
@@ -41,8 +41,7 @@ def T2FTS(data,metodo_part,mf_type,partition_parameters,order,diff):
     'Objeto da classe tipo2'
     modelo = Type2Model(treino,order) 
     
-    
-    
+
         
     '------------------------------------------------ Geração de sets  -------------------------------------------------'
 
@@ -92,7 +91,9 @@ def T2FTS(data,metodo_part,mf_type,partition_parameters,order,diff):
         raise Exception("Method %s not implemented" % metodo_part)
         
         
-    #IT2FS_plot(*modelo.dict_sets.values())
+    #Plot partition graphs
+    #plot_title = str(numero_de_sets) + ' partitions'
+    #IT2FS_plot(*modelo.dict_sets.values(),title= plot_title)
     
     '------------------------------------------------ Treinamento  ------------------------------------------'
         
@@ -104,27 +105,26 @@ def T2FTS(data,metodo_part,mf_type,partition_parameters,order,diff):
     teste = np.clip(teste, modelo.dominio_inf+1, modelo.dominio_sup-1)
 
     
-    print("Começando o teste...")
-    print("Particionamento:",metodo_part,"| N. de conjuntos:", numero_de_sets, "| Ordem:", order)
+    print("Partitioner:",metodo_part,"| N. of sets:", numero_de_sets, "| Order:", order)
     print("")
-    resultado_processo = modelo.predict(teste)   #A lista com as previsoes da janela do momento sao retornadas para esta variavel
+    forecast_result = modelo.predict(teste)   #A lista com as previsoes da janela do momento sao retornadas para esta variavel
 
     
     'Retorna os valores para a escala original (ou seja, desfaz a diferenciacao)'
     if diff == True:
-        resultado_processo = resultado_processo[1:] #faz isso por causa da diferenciação
-        resultado_processo = tdiff.inverse(resultado_processo,teste_orig)
+        forecast_result = forecast_result[1:] #faz isso por causa da diferenciação
+        forecast_result = tdiff.inverse(forecast_result,teste_orig)
         teste = teste_orig[order:]  # Para plotar e metricas de erro deve usar a serie original
         
     else:       
         teste = teste[order:]  # O primeiro item nao tem correspondente na previsao
-        resultado_processo = resultado_processo[:-1]
+        forecast_result = forecast_result[:-1]
 
     '------------------------------------------------  Métricas de erro  ------------------------------------------'
-    lista_erros = metricas_erro(teste,resultado_processo)
+    lista_erros = metricas_erro(teste,forecast_result)
         
     'Plotar o grafico teste x previsao'      
-    #plotar_previsao(teste,resultado_processo)
+    #plotar_previsao(teste,forecast_result)
     
     
     return lista_erros,numero_de_sets,FLR,FLRG

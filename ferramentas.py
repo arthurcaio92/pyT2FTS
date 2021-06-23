@@ -356,7 +356,7 @@ def metricas_erro(teste,previsao):
         
     udetheil = 0
   
-    print("Metricas de erro:")
+    print("Error Metrics:")
                    
     mape = mape_function(teste, previsao)
     print("MAPE", mape)

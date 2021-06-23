@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from pyT2FTS.sliding_window import janela_deslizante
+from pyT2FTS.sliding_window import run_sliding_window
 from pyT2FTS.datasets import get_TAIEX,get_NASDAQ,get_Brent_Oil,get_SP500
 import numpy as np
 import pandas as pd
@@ -51,8 +51,8 @@ taiex = taiex.to_numpy()
 datasets = [taiex]
 dataset_names = ['NASDAQ']
 diff = 1                                   #Se diff = 1, diferencia os dados. Se diff = 0, não diferencia
-particoes = np.arange(3,4)                 #particoes deve ser uma lista
-ordens = [1]
+partitions = np.arange(6,7)                 #particoes deve ser uma lista
+orders = [1]
 partitioners = ['SODA']            #partitioners: 'chen' 'SODA' 'ADP' 'DBSCAN' 'CMEANS' 'entropy' 'FCM'  
 mfs = ['triangular']         #mfs: 'triangular' ou 'trapezoidal' ou 'gaussian'
 
@@ -60,7 +60,7 @@ mfs = ['triangular']         #mfs: 'triangular' ou 'trapezoidal' ou 'gaussian'
 
 
 'Builds and runs the model'
-janela_deslizante(datasets,dataset_names,diff,particoes,ordens,partitioners,mfs)
+run_sliding_window(datasets,dataset_names,diff,partitions,orders,partitioners,mfs)
 
 
 

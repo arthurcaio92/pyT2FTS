@@ -1,30 +1,31 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 import numpy as np
-from pyT2FTS.processo_completo import T2FTS
+from pyT2FTS.Headquarters import T2FTS
 import pickle #To save the data as the process goes
 import time
 
     
-def run_sliding_window(datasets,dataset_names,diff,particoes,ordens,partitioners,mfs):
+def run_sliding_window(datasets,dataset_names,diff,partition_parameters,orders,partitioners,mfs):
     
-    """Realiza a janela deslizante sobre um conjunto de dados.
-    Tamanho da janela padrão é de 1000 amostras.
+    """
+    
+    Performs sliding window methodology over a time series
     
     params:
-    :data: dados que serao treinados e testados
-    :diff: comando para diferenciar ou nao os valores de 'data'
-    :particoes: Lista contendo numeros de particoes que serão testados pela janela. Se método for SODA, então refere-se ao gridsize
-    :ordens: Lista contendo numeros de ordens que serão testados pela janela
+    :datasets: List of time series
+    :dataset_names: List of time series names
+    :diff: List of flag to differentiate or not the input data
+    :partition_parameters: List of partition parameters to be used. If method_part is SODA or ADP, then partitions is the gridsize.
+    :orders: List of List of model orders ( n. or lags in forecasting)
+    :partitioners: List of partitioners to be used
+    :mfs: List of membership functions to be used
     
-    Return
+    Return (currently disabled)
     
-    :df_geral: dataframe contendo erros gerais, referentes a cada janela
-    :df_especifico: dataframe contendo erros especificos, referentes a cada janela
-    Salva arquivo em Excel contendo duas planilhas:
-        Erros gerais: Mostra erros por janela
-        Errros especificos: Mostra media e desvio de padrao de RMSE de todas as janelas 
-        por gridsize/numero de particoes
+    :df_general: dataframe containing general error, about each window    
+    :df_specific: dataframe with average errors accounting for all window  
+    Saves an excel file (.xlsx) in the end with error metrics
 
     """
     
@@ -33,30 +34,29 @@ def run_sliding_window(datasets,dataset_names,diff,particoes,ordens,partitioners
         raise Exception("Please specify the correct number of datasets and their names")
         
     
-    "Variavel auxiliar para saber o nome do dataset"
+    'Auxiliar variable to know the name of the data set'
     name_index = 0
     
     for data in datasets:
         
         data_name = dataset_names[name_index]
-        name_index = name_index + 1 #atualiza para o proximo loop
+        name_index = name_index + 1 #update for the nex loop
         
         
-        for metodo_part in partitioners:
+        for method_part in partitioners:
             
             for mf_type in mfs:
-
-              
-                'Verificações'
+           
+                'Verifications'
                 
-                'Se alguma dessas situações ocorrer, ignora esse loop do for e passa para o próximo'
+                'If any of these situations happen, ignore this loop and goes to the next'
                 
-                if metodo_part == 'CMEANS' and (mf_type == 'trapezoidal' or mf_type == 'gaussian'):
-                    print("-------------\n","WARNING: ", metodo_part," does not support ",mf_type," membership function","\n-------------",)
+                if method_part == 'CMEANS' and (mf_type == 'trapezoidal' or mf_type == 'gaussian'):
+                    print("-------------\n","WARNING: ", method_part," does not support ",mf_type," membership function","\n-------------",)
                     continue
                 
-                if (metodo_part == 'FCM' or metodo_part == 'entropy') and (mf_type == 'gaussian'):
-                    print(metodo_part," does not support ",mf_type," membership function")
+                if (method_part == 'FCM' or method_part == 'entropy') and (mf_type == 'gaussian'):
+                    print(method_part," does not support ",mf_type," membership function")
                     continue
                 
                 'Let''s measure the total elapsed time for the whole process to be completed'
@@ -67,30 +67,30 @@ def run_sliding_window(datasets,dataset_names,diff,particoes,ordens,partitioners
             
                 'list to sabe the errors'
                 lista_rmse = []
-                lista_particoes = []
-                lista_regras = []
+                lista_partitions = []
+                lista_rules = []
                 lista_flrg = []
                 
-                erros_geral = {'Gridsize':[],
-                               'Particoes':[],
-                               'Ordem':[],
-                               'Janela':[],
+                general_errors = {'Gridsize':[],
+                               'Partitions':[],
+                               'Order':[],
+                               'Window':[],
                                'UDETHEIL':[],
                                'MAPE':[],
                                'MSE':[],
                                'RMSE':[],
                                'MAE':[],
                                'NDEI':[],
-                               'Media_RMSE':[],
-                               'Desv_pad_RMSE':[],
+                               'Avg_RMSE':[],
+                               'Std_dev_RMSE':[],
                                'FLR':[],
                                'FLRG':[]
                               
                                }
                 
-                erros_especifico = {'Gridsize':[],
-                                    'Ordem':[],
-                                    'Particoes': [],
+                specific_errors = {'Gridsize':[],
+                                    'Order':[],
+                                    'Partitions': [],
                                     'mean_RMSE': [],
                                     'std_RMSE': [],
                                     'FLR':[],
@@ -103,13 +103,13 @@ def run_sliding_window(datasets,dataset_names,diff,particoes,ordens,partitioners
                 
                 '-----Begins the Gridsearch------'
                 
-                for numero in particoes:
+                for part_param in partition_parameters:
                     
-                    gridsize = numero
+                    gridsize = part_param
                     
-                    for lag in ordens:
+                    for lag in orders:
                     
-                        '------------------------------------------------ Janela deslizante -------------------------------------------------'
+                        '------------------------------------------------ Sliding Window -------------------------------------------------'
                            
                         #window_size = int(0.2*len(data))      #Tamanho da janela deslizante
                         window_size = 1000
@@ -129,43 +129,41 @@ def run_sliding_window(datasets,dataset_names,diff,particoes,ordens,partitioners
                         
                             '------------------------------------------------ Window setup -------------------------------------------------'
                 
-                            'Define a ordem do sistema'
+                            'Define model order'
                             order = lag
                             
-                            'Define o numero de conjuntos'
-                            numero_de_sets = numero
                                             
-                            lista_erros,n_sets,FLR,FLRG = T2FTS(dados,metodo_part,mf_type,partition_parameters=numero_de_sets,order=order,diff=diff)
+                            lista_erros,n_sets,FLR,FLRG = T2FTS(dados,method_part,mf_type,part_param,order=order,diff=diff)
                            
                             print("---------------------------------")
                                
-                            '------------------------------------------------  Metricas de erro  ------------------------------------------'
-                            'acrescenta na lista de erros o rmse'
+                            '------------------------------------------------  Error Metrics  ------------------------------------------'
+                            'Gets the RMSE from the errors list'
                             lista_rmse.append(lista_erros[3])
                             
-                            'acrescenta na lista do numero de regras'
-                            lista_regras.append(FLR)
+                            'Adds the number of rules to the respective list'
+                            lista_rules.append(FLR)
                             lista_flrg.append(FLRG)
-                            lista_particoes.append(n_sets)
+                            lista_partitions.append(n_sets)
                             
-                            'Constroi o dicionario de erros gerais ( que mostras as janelas)'
-                            erros_geral['Gridsize'].append(gridsize)                
-                            erros_geral['Particoes'].append(n_sets)
-                            erros_geral['Ordem'].append(order)
-                            erros_geral['Janela'].append("{}:{}".format(window_inf,window_sup))
+                            'Builds the general_errors dictionary with data for each window'
+                            general_errors['Gridsize'].append(gridsize)                
+                            general_errors['Partitions'].append(n_sets)
+                            general_errors['Order'].append(order)
+                            general_errors['Window'].append("{}:{}".format(window_inf,window_sup))
             
-                            erros_geral['UDETHEIL'].append(lista_erros[0])
-                            erros_geral['MAPE'].append(lista_erros[1])
-                            erros_geral['MSE'].append(lista_erros[2])
-                            erros_geral['RMSE'].append(lista_erros[3])
-                            erros_geral['MAE'].append(lista_erros[4])                
-                            erros_geral['NDEI'].append(lista_erros[5]) 
-                            erros_geral['Media_RMSE'].append(None)   
-                            erros_geral['Desv_pad_RMSE'].append(None)   
-                            erros_geral['FLR'].append(FLR)
-                            erros_geral['FLRG'].append(FLRG)
+                            general_errors['UDETHEIL'].append(lista_erros[0])
+                            general_errors['MAPE'].append(lista_erros[1])
+                            general_errors['MSE'].append(lista_erros[2])
+                            general_errors['RMSE'].append(lista_erros[3])
+                            general_errors['MAE'].append(lista_erros[4])                
+                            general_errors['NDEI'].append(lista_erros[5]) 
+                            general_errors['Avg_RMSE'].append(None)   
+                            general_errors['Std_dev_RMSE'].append(None)   
+                            general_errors['FLR'].append(FLR)
+                            general_errors['FLRG'].append(FLRG)
                            
-                            'Desliza a janela'
+                            'Slides the window'
                             window_inf = window_inf+200
                             window_sup = window_sup+200
                             
@@ -178,112 +176,113 @@ def run_sliding_window(datasets,dataset_names,diff,particoes,ordens,partitioners
                         
                         method_elapsed_time = method_end_time - method_start_time
                         
-                        'Calcula a media e desvio padrao de RMSE de todas as instancias da janela para a ordem e partição do momento'
-                       
+                        'Calculates RMSE average and std. dev. for all windows'
+                        
                         avg_rmse = np.mean(lista_rmse)
                         std_rmse = np.std(lista_rmse)
-                        avg_particoes = np.mean(lista_particoes)
-                        avg_regras = np.mean(lista_regras)
+                        avg_partitions = np.mean(lista_partitions)
+                        avg_rules = np.mean(lista_rules)
                         avg_flrg = np.mean(lista_flrg)
             
-                        'Preenche as linhas que informam os valores médios das métricas. Todas as outras colunas sao zeradas'
-                        'Algumas sao None porque nao deve aparecer nada na tabela do Excel'
                         
-                        '### Primeira linha: vazia ###'
-                        erros_geral['Gridsize'].append(None)
-                        erros_geral['Particoes'].append(None)
-                        erros_geral['Ordem'].append(None)
-                        erros_geral['Janela'].append(None)
-                   
-                        erros_geral['UDETHEIL'].append(None)
-                        erros_geral['MAPE'].append(None)
-                        erros_geral['MSE'].append(None)
-                        erros_geral['RMSE'].append(None)
-                        erros_geral['MAE'].append(None)                
-                        erros_geral['NDEI'].append(None)   
-                        erros_geral['Media_RMSE'].append(None) 
-                        erros_geral['Desv_pad_RMSE'].append(None)  
-                        erros_geral['FLR'].append(None)
-                        erros_geral['FLRG'].append(None)
+                        'Fills the lines correspondent to the mean values of the metrics. The other lines are zero'
+                        'Some are None because it has to show nothing on the Excel file'
                         
-                        '### Segunda linha: Médias das métricas ###'
-                        erros_geral['Gridsize'].append('Médias:')
-                        erros_geral['Particoes'].append(avg_particoes)
-                        erros_geral['Ordem'].append(None)
-                        erros_geral['Janela'].append(None)
+                        '### First line: empty ###'
+                        general_errors['Gridsize'].append(None)
+                        general_errors['Partitions'].append(None)
+                        general_errors['Order'].append(None)
+                        general_errors['Window'].append(None)
                    
-                        erros_geral['UDETHEIL'].append(None)
-                        erros_geral['MAPE'].append(None)
-                        erros_geral['MSE'].append(None)
-                        erros_geral['RMSE'].append(None)
-                        erros_geral['MAE'].append(None)                
-                        erros_geral['NDEI'].append(None)   
-                        erros_geral['Media_RMSE'].append(avg_rmse) 
-                        erros_geral['Desv_pad_RMSE'].append(std_rmse)  
-                        erros_geral['FLR'].append(avg_regras)
-                        erros_geral['FLRG'].append(avg_flrg)
+                        general_errors['UDETHEIL'].append(None)
+                        general_errors['MAPE'].append(None)
+                        general_errors['MSE'].append(None)
+                        general_errors['RMSE'].append(None)
+                        general_errors['MAE'].append(None)                
+                        general_errors['NDEI'].append(None)   
+                        general_errors['Avg_RMSE'].append(None) 
+                        general_errors['Std_dev_RMSE'].append(None)  
+                        general_errors['FLR'].append(None)
+                        general_errors['FLRG'].append(None)
+                        
+                        '### Second line: Error metrics averages ###'
+                        general_errors['Gridsize'].append('Médias:')
+                        general_errors['Partitions'].append(avg_partitions)
+                        general_errors['Order'].append(None)
+                        general_errors['Window'].append(None)
+                   
+                        general_errors['UDETHEIL'].append(None)
+                        general_errors['MAPE'].append(None)
+                        general_errors['MSE'].append(None)
+                        general_errors['RMSE'].append(None)
+                        general_errors['MAE'].append(None)                
+                        general_errors['NDEI'].append(None)   
+                        general_errors['Avg_RMSE'].append(avg_rmse) 
+                        general_errors['Std_dev_RMSE'].append(std_rmse)  
+                        general_errors['FLR'].append(avg_rules)
+                        general_errors['FLRG'].append(avg_flrg)
             
-                        '### Terceira linha: vazia ###'
-                        erros_geral['Gridsize'].append(None)
-                        erros_geral['Particoes'].append(None)
-                        erros_geral['Ordem'].append(None)
-                        erros_geral['Janela'].append(None)
+                        '### Third line: empty ###'
+                        general_errors['Gridsize'].append(None)
+                        general_errors['Partitions'].append(None)
+                        general_errors['Order'].append(None)
+                        general_errors['Window'].append(None)
                    
-                        erros_geral['UDETHEIL'].append(None)
-                        erros_geral['MAPE'].append(None)
-                        erros_geral['MSE'].append(None)
-                        erros_geral['RMSE'].append(None)
-                        erros_geral['MAE'].append(None)                
-                        erros_geral['NDEI'].append(None)   
-                        erros_geral['Media_RMSE'].append(None) 
-                        erros_geral['Desv_pad_RMSE'].append(None)  
-                        erros_geral['FLR'].append(None)
-                        erros_geral['FLRG'].append(None)
+                        general_errors['UDETHEIL'].append(None)
+                        general_errors['MAPE'].append(None)
+                        general_errors['MSE'].append(None)
+                        general_errors['RMSE'].append(None)
+                        general_errors['MAE'].append(None)                
+                        general_errors['NDEI'].append(None)   
+                        general_errors['Avg_RMSE'].append(None) 
+                        general_errors['Std_dev_RMSE'].append(None)  
+                        general_errors['FLR'].append(None)
+                        general_errors['FLRG'].append(None)
                         
-                        'Constroi dicionario de erros especificos'   
-                        
-                        
-                        erros_especifico['Gridsize'].append(gridsize)   
-                        erros_especifico['Ordem'].append(order)         
-                        erros_especifico['Particoes'].append(avg_particoes) 
-                        erros_especifico['FLR'].append(avg_regras)  
-                        erros_especifico['FLRG'].append(avg_flrg)  
-                        erros_especifico['mean_RMSE'].append(avg_rmse)
-                        erros_especifico['std_RMSE'].append(std_rmse)
-                        erros_especifico['Time(s)'].append(method_elapsed_time)
-                        erros_especifico['Total Time(s)'].append(None)
+                        'Builds the specific_error dictionary'   
+                                              
+                        specific_errors['Gridsize'].append(gridsize)   
+                        specific_errors['Order'].append(order)         
+                        specific_errors['Partitions'].append(avg_partitions) 
+                        specific_errors['FLR'].append(avg_rules)  
+                        specific_errors['FLRG'].append(avg_flrg)  
+                        specific_errors['mean_RMSE'].append(avg_rmse)
+                        specific_errors['std_RMSE'].append(std_rmse)
+                        specific_errors['Time(s)'].append(method_elapsed_time)
+                        specific_errors['Total Time(s)'].append(None)
             
                         
-                        'Printa na tela o resultado das janelas'
-                        if metodo_part == 'chen':
-                            r = "RMSE Médio - part: " + str(numero) + ", ordem: " + str(order)
+                        'Prints the results'
+                        if method_part == 'chen':
+                            r = "RMSE avg - part: " + str(part_param) + ", Order: " + str(order)
                             print("[",r,"]:",avg_rmse)
                             print("---------------------------------")
             
-                        elif metodo_part == 'SODA' or metodo_part == 'ADP': 
-                            r = "RMSE Médio - Gridsize: " + str(gridsize) + ", ordem: " + str(order)
+                        elif method_part == 'SODA' or method_part == 'ADP': 
+                            r = "RMSE avg - Gridsize: " + str(gridsize) + ", Order: " + str(order)
                             print("[",r,"]:",avg_rmse)
                             print("---------------------------------")
                         
                         else:
-                            r = "RMSE Médio - Parâmetro: " + str(gridsize) + ", ordem: " + str(order)
+                            r = "RMSE avg - Parâmetro: " + str(gridsize) + ", Order: " + str(order)
                             print("[",r,"]:",avg_rmse)
                             print("---------------------------------")
                         
                             
                                         
-                        'usa Pickle para salvar os dicionarios a cada janela'
-                        pickle_out = open("gerais.pickle","wb")
-                        pickle.dump(erros_geral, pickle_out)
-                        pickle_out = open("especifico.pickle","wb")          
-                        pickle.dump(erros_especifico, pickle_out)         
+                        'Use pickle to save the dicts after each window as backup'
+                        
+                        pickle_out = open("general.pickle","wb")
+                        pickle.dump(general_errors, pickle_out)
+                        pickle_out = open("specific.pickle","wb")          
+                        pickle.dump(specific_errors, pickle_out)         
                         pickle_out.close()
                     
                         'Resets the lists'
                         lista_rmse = []  
-                        lista_regras = []
+                        lista_rules = []
                         lista_flrg = []
-                        lista_particoes = []
+                        lista_partitions = []
                         
                 
                 'Ends time measurement'
@@ -291,42 +290,42 @@ def run_sliding_window(datasets,dataset_names,diff,particoes,ordens,partitioners
                 total_elapsed_time = end_time - start_time
                 
                 'Adds the final line with the total elapsed time'
-                erros_especifico['Gridsize'].append(None)   
-                erros_especifico['Ordem'].append(None)         
-                erros_especifico['Particoes'].append(None) 
-                erros_especifico['FLR'].append(None)  
-                erros_especifico['FLRG'].append(None)  
-                erros_especifico['mean_RMSE'].append(None)
-                erros_especifico['std_RMSE'].append(None)
-                erros_especifico['Time(s)'].append('Total Elapsed Time:')
-                erros_especifico['Total Time(s)'].append(total_elapsed_time)
+                specific_errors['Gridsize'].append(None)   
+                specific_errors['Order'].append(None)         
+                specific_errors['Partitions'].append(None) 
+                specific_errors['FLR'].append(None)  
+                specific_errors['FLRG'].append(None)  
+                specific_errors['mean_RMSE'].append(None)
+                specific_errors['std_RMSE'].append(None)
+                specific_errors['Time(s)'].append('Total Elapsed Time:')
+                specific_errors['Total Time(s)'].append(total_elapsed_time)
                            
                 
-                '------------------------------------------------  Salva metricas em Excel  ------------------------------------------'
+                '------------------------------------------------  Save to excel  ------------------------------------------'
             
-                'Define o nome do arquivo final com os erros'
+                'Defines the name of the final file'
                 if diff == 0:  
-                    nome_arquivo = metodo_part + "_semdiff_" + data_name + "_" + mf_type + "_" + str(particoes[0]) + "a" + str(particoes[-1]) + ".xlsx"
+                    name_file = method_part + "_semdiff_" + data_name + "_" + mf_type + "_" + str(partition_parameters[0]) + "a" + str(partitions[-1]) + ".xlsx"
                     
                 elif diff == 1:   
-                    nome_arquivo = metodo_part + "_diff_" + data_name + "_" + mf_type + "_" + str(particoes[0]) + "a" + str(particoes[-1]) + ".xlsx"      
+                    name_file = method_part + "_diff_" + data_name + "_" + mf_type + "_" + str(partition_parameters[0]) + "a" + str(partitions[-1]) + ".xlsx"      
                        
                 
-                print("Arquivo salvo:",nome_arquivo)
-                writer = pd.ExcelWriter(nome_arquivo, engine='xlsxwriter')
+                print("Saved file:",name_file)
+                writer = pd.ExcelWriter(name_file, engine='xlsxwriter')
                         
-                df_geral = pd.DataFrame(data=erros_geral)
-                df_especifico = pd.DataFrame(data=erros_especifico)
-                #df_especifico.columns = ['Gridsize','Particoes','RMSE medio 1_Ordem', 'Desvio padrao RMSE 1_Ordem','RMSE medio 2_Ordem', 'Desvio padrao RMSE 2_Ordem','RMSE medio 3_Ordem', 'Desvio padrao RMSE 3_Ordem','FLR','FLRG']    
+                df_general = pd.DataFrame(data=general_errors)
+                df_specific = pd.DataFrame(data=specific_errors)
+                #df_especifico.columns = ['Gridsize','Partitions','RMSE medio 1_Order', 'Desvio padrao RMSE 1_Order','RMSE medio 2_Order', 'Desvio padrao RMSE 2_Order','RMSE medio 3_Order', 'Desvio padrao RMSE 3_Order','FLR','FLRG']    
                        
-                df_geral.to_excel(writer, sheet_name='Geral',index = False)
-                df_especifico.to_excel(writer, sheet_name='Específico',index = False)
+                df_general.to_excel(writer, sheet_name='General errors',index = False)
+                df_specific.to_excel(writer, sheet_name='Especific errors',index = False)
                
                 writer.save()
                 
-                #FAZ o download do arquivo de resultados para o computador
+                #Downloads the Excel file to computer
                 #from google.colab import files
-                #files.download(nome_arquivo)
+                #files.download(name_file)
                 
                 
              

@@ -2293,15 +2293,14 @@ class Type2Model():
 
         
 
-    def chen_model_sobreposto(self, numero_de_sets, mf_type): 
+    def grid_partitioning(self, numero_de_sets, mf_type): 
         """ 
-        Cria os conjuntos fuzzy SOBREPOSTOS 
-        1) Identifica as coordenadas de cada função 
-        2) Gera as MFs a partir delas
-        
+        Create overlapping fuzzy sets
+
+     
         """
         
-        'configurações inciais'
+        'Initial setup'
         Type2Model.config_inicial(self,self.training_data,numero_de_sets)
                                         
         dict_sets = {}   #Dicionário contendo os sets
@@ -2429,7 +2428,7 @@ class Type2Model():
         
     
     
-    def chen_model_sequencial(self,numero_de_sets):
+    def grid_partitioning_sequencial(self,numero_de_sets):
         """ 
         Cria os conjuntos fuzzy SEQUENCIAIS
         
@@ -2468,7 +2467,7 @@ class Type2Model():
         self.dict_sets = dict_sets
     
     
-    def treinamento(self):      
+    def training(self):      
         """
         Fuzzyfica os valores da serie de treino para encontrar os conjuntos fuzzy correspondentes
         a cada um deles.  Pode ser usada para conjuntos sobrepostos e sequenciais
@@ -2716,7 +2715,7 @@ class Type2Model():
 
 
     
-    def treinamento_multiplas_entradas(self,dict_sets, order, data_close,data_lower,data_high):      
+    def multivariate_training(self,dict_sets, order, data_close,data_lower,data_high):      
         """
         Fuzzyfica os valores das series de treino para encontrar os conjuntos fuzzy correspondentes
         a cada um deles.  Pode ser usada para conjuntos sobrepostos e sequenciais

@@ -4,7 +4,7 @@ from pandas import DataFrame
   
     
 
-def conjuntos_soda(data,gridsize):
+def SODA_part(data,gridsize):
     
     """Retorna apenas o numero de conjuntos encontrado pelo SODA"""
     
@@ -24,7 +24,7 @@ def conjuntos_soda(data,gridsize):
     return numero_de_sets
     
  
-def conjuntos_adp(data,gridsize, distancetype='chebyshev'):
+def ADP_part(data,gridsize, distancetype='chebyshev'):
     'A distancia pode ser chebyshev, euclidean, cityblock, sqeuclidean ou cosine'
 	
     """Retorna apenas o numero de conjuntos encontrado pelo ADP"""
@@ -46,7 +46,7 @@ def conjuntos_adp(data,gridsize, distancetype='chebyshev'):
     return numero_de_sets
 
 
-def conjuntos_dbscan(data, eps):
+def DBSCAN_part(data, eps):
     from sklearn.cluster import DBSCAN
     
     print("Parâmetro:",eps )
@@ -82,7 +82,7 @@ def conjuntos_dbscan(data, eps):
     return numero_de_sets
 
 
-def conjuntos_cmeans(data, k, mf_type):
+def CMEANS_part(data, k, mf_type):
     from pyFTS.partitioners import CMeans
     from pyFTS.common import Membership #utilizado no argumento func
     
@@ -103,7 +103,7 @@ def conjuntos_cmeans(data, k, mf_type):
     
     return cmeans_params
 
-def conjuntos_entropy(data, k, mf_type):
+def ENTROPY_part(data, k, mf_type):
     from pyFTS.partitioners import Entropy
     from pyFTS.common import Membership
     
@@ -124,7 +124,7 @@ def conjuntos_entropy(data, k, mf_type):
     
     return entropy_params
 
-def conjuntos_fcm(data,k, mf_type):
+def FCM_part(data,k, mf_type):
     from pyFTS.partitioners import FCM
     from pyFTS.common import Membership
     
@@ -145,7 +145,7 @@ def conjuntos_fcm(data,k, mf_type):
     
     return fcm_params
 
-def conjuntos_huarng(data):
+def HUARNG_part(data):
     from pyFTS.partitioners import Huarng
     
     #Executa o particionamento e salva num objeto

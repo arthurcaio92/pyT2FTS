@@ -212,7 +212,7 @@ def agrupar_regras(n_conj,lista_regras):
 
  
   
-def plotar_previsao(teste_func,previsao):
+def plot_forecast(teste_func,previsao):
     
     """Plota um gráfico dos dados_originas x previsão
     
@@ -335,7 +335,7 @@ def operador_intersecao_uniao(n_amostras,conj_ativ_close,conj_ativ_lower,conj_at
     return regras_gerais_int,dict_int,regras_gerais_union,dict_union
 
 
-def metricas_erro(teste,previsao): 
+def error_metrics(teste,previsao): 
     """
     Calcula metricas de erro para a previsao. 
     

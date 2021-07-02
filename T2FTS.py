@@ -158,11 +158,11 @@ def tri_mf(x, params):
     >>> membership_value = tri_mf(x, [0.1, 0.3, 0.5, 1])
     
     
-    Observação: Codigo original aqui em baixo:
+    Observations: original code below:
     return minimum(1, maximum(0, ((params[3] * (x - params[0]) / (params[1] - params[0])) * (x <= params[1]) + \
                ((params[3] * ((params[2] - x) / (params[2] - params[1]))) * (x > params[1]))) ))
     
-    Mudei para tratar a excecao do erro da divisao por zero:
+    I changed to treat the exception of division by zero
         
     try:
         res = minimum(1, maximum(0, ((params[3] * (x - params[0]) / (params[1] - params[0])) * (x <= params[1]) + \
@@ -903,10 +903,10 @@ def L_IT2FS_Gaussian_UncertStd(domain, params):
                   [params[0], stdl, stdr, params[3]])
 
 
-def IT2FS_plot_antigo(*sets, title=None, legends=None, filename=None):
+def IT2FS_plot_OLD(*sets, title=None, legends=None, filename=None):
     """
-    
-    FUNCAO ANTES DE PLOTAR COM NOME DO SET: A1, A2, A4....
+        
+    PREVIOUS VERSION OF THIS FUNCTION, BEFORE PLOTTING WITH SET NAMES: A1, A2, A4....
     
     Plots multiple IT2FSs together in the same figure.
     
@@ -945,8 +945,7 @@ def IT2FS_plot_antigo(*sets, title=None, legends=None, filename=None):
     """
     centroids = []
     centroids_names = []
-    'para gerar graficos maiores:'
-    #antes era 15,5
+    #It was 15,5
     plt.figure(figsize=(30,5))
     for it2fs in sets:
         plt.fill_between(it2fs.domain, it2fs.upper, it2fs.lower,alpha=0.5)
@@ -959,8 +958,6 @@ def IT2FS_plot_antigo(*sets, title=None, legends=None, filename=None):
         centroids_names.append(it2fs.nome)
     if title is not None:
         plt.title(title)
-    #plt.xlabel("Universe of Discourse",fontsize=25)
-    #plt.ylabel("Degree of Membership",fontsize=25)
     
     plt.xlabel("Universe of Discourse",fontsize=25)
     plt.ylabel("Membership Degree",fontsize=25)
@@ -1014,8 +1011,7 @@ def IT2FS_plot(*sets, title=None, legends=None, filename=None):
     centroids = [] #store mfs center points for ticks in x-axis
     centroids_names = []   #store  mfs names for x-axis ticks
     
-    'para gerar graficos maiores:'
-    fig, ax = plt.subplots(figsize=(25,5))  #antes era 15,5
+    fig, ax = plt.subplots(figsize=(25,5))  #it was 15,5
 
     for it2fs in sets:
         ax.fill_between(it2fs.domain, it2fs.upper, it2fs.lower,alpha=0.5)
@@ -2139,7 +2135,9 @@ def ModiHe(it2fs_array, spread_array, alg_func, domain, alg_params=None):
 
 
 class Type2Model():
-    """Interval type 2 fuzzy logic system.
+    
+    """
+    Interval type 2 fuzzy logic system.
     
     No construction parameter is needed.
     
@@ -2204,9 +2202,8 @@ class Type2Model():
         * IF x1 is Medium and x2 is Medium THEN y1 is Medium and y2 is Small
         * IF x1 is Large and x2 is Large THEN y1 is Large and y2 is Small
     
-    The codes to simulate the aforementioned system using the PyIT2FLS 
-    would be as below:
-    
+    The codes to simulate the aforementioned system would be:
+        
     >>> domain = linspace(0., 1., 100)
     >>> 
     >>> Small = IT2FS_Gaussian_UncertStd(domain, [0, 0.15, 0.1])
@@ -2236,9 +2233,7 @@ class Type2Model():
     
     Notes
     -----
-    
-    While using the PyIT2FLS some cares must be taken by the user 
-    himself which are listed as below:
+
         
         * The UMF defined for an IT2FS must be greater than or equal with the LMF at all points of the discrete universe of discourse. 
         * The inputs and outputs defined must be compatible while adding the rules and evluating the IT2FLS.
@@ -2259,17 +2254,17 @@ class Type2Model():
     
     def config_inicial(self,data,n_sets):
         """
-        Faz os calculos iniciais dos paramentros para o resto das operações'
+        Initial operations to define the main parameters
         """
         
         self.data=data
   
-        'Prepara o universo de discurso (dominio) para a criação dos sets fuzzy'
+        'Prepares the universe of discourse (domain) for the creation of fuzzy sets'
         
         minimo = np.nanmin(data)
         maximo = np.nanmax(data)
         
-        'Verifica o sinal dos valores em data.'         
+        'Verifies the signal of the values in the data'         
                     
         self.dominio_inf = np.float64(minimo * 1.1 if minimo < 0 else minimo * 0.9)
         self.dominio_sup = np.float64(maximo * 1.1 if maximo > 0 else maximo * 0.9)
@@ -2277,7 +2272,7 @@ class Type2Model():
         pontos = self.dominio_sup - self.dominio_inf
         domain_length = pontos
                 
-        'universo de discurso'
+        'Universe of Discourse'
 
         if domain_length > 1000: 
             self.domain = linspace(self.dominio_inf, self.dominio_sup, int(domain_length))
@@ -2287,8 +2282,8 @@ class Type2Model():
 
         self.numero_de_sets = n_sets
         
-        self.intervalo_entre_set = pontos/(self.numero_de_sets+1) #Define os pontos em que cada set se inicia        
-        self.largura_set = pontos/(self.numero_de_sets) #Define os pontos em que cada set se inicia
+        self.intervalo_entre_set = pontos/(self.numero_de_sets+1) #Points where each fuzzy sets begins       
+        self.largura_set = pontos/(self.numero_de_sets)
 
 
         
@@ -2296,72 +2291,73 @@ class Type2Model():
     def grid_partitioning(self, numero_de_sets, mf_type): 
         """ 
         Create overlapping fuzzy sets
-
      
         """
         
         'Initial setup'
         Type2Model.config_inicial(self,self.training_data,numero_de_sets)
                                         
-        dict_sets = {}   #Dicionário contendo os sets
+        dict_sets = {}   #Dictionary with the fuzzy sets
         
         if mf_type == 'triangular':
             
-            'Descobre os pontos de início de cada conjunto'
+            'Finds the beggining points of each interval'
             pontos_conj = []
             for x in range(self.numero_de_sets+2):
                 pontos_conj.append(self.dominio_inf + (self.intervalo_entre_set * x))
             
-            'Constroi os intervalos de cada set'
+            'Builds the intervals'
             intervalos_conjuntos = []
             for x in range(1,self.numero_de_sets+1):
                 aux = [pontos_conj[x-1],pontos_conj[x],pontos_conj[x+1]]
                 intervalos_conjuntos.append(aux)
                 
-            'Constroi cada set a medida que avança na lista de intervalos de conjuntos'
+            'Builds each fuzzy set by advancing in the list: intervalos_conjuntos '
             for x in range(1,self.numero_de_sets+1):
           
                 r,t,y = intervalos_conjuntos[x-1]
-                b_esq = r        #Base esquerda
-                topo_tri = t     #Topo do triangulo
+                b_esq = r        #Left endpoint
+                topo_tri = t     #Top of triangle
                 b_dir = y  
                 
                 #print(b_esq,topo_tri,b_dir)
                 
-                fou_right = (b_dir-topo_tri)*0.4        #A mancha nao pode ser maior dos que os vertices do triangulo
-                fou_left = (topo_tri-b_esq)*0.4        #Calcula a mancha da esquerda e direita e pega a menor para valer para os dois
+                fou_right = (b_dir-topo_tri)*0.4        #FOU cannot be greater than MF endpoints
+                fou_left = (topo_tri-b_esq)*0.4       
                 #fou = min(fou_left,fou_right)
                 
-                nome = 'Ã%d'%x  #manda junto o nome do set para usar se precisar
+                nome = 'Ã%d'%x  #Name of the set
                 dict_sets['A%d' %x] = FuzzySet(self.domain, tri_mf, [b_esq, topo_tri, b_dir, 1],tri_mf, [b_esq+fou_left, topo_tri, b_dir-fou_right, 0.9],nome = nome)
 
         if mf_type == 'trapezoidal':
             
             for x in range(1,self.numero_de_sets+1):
                 
-                'Descobre o centroide de cada conjunto'
+                'Finds the centroid of each set'
                 centroide = self.dominio_inf + (self.intervalo_entre_set*x)
             
-                'Constroi os intervalos de cada set'
+                'Builds the intervals of each set'
                 a  = centroide - 1.00 * self.intervalo_entre_set
                 b1 = centroide - 0.50 * self.intervalo_entre_set
                 b2 = centroide + 0.50 * self.intervalo_entre_set
                 c  = centroide + 1.00 * self.intervalo_entre_set
                 
-                'Cria as manchas de incerteza'
-                fou_right = (c - b2) * 0.4       #A mancha nao pode ser maior dos que os vertices do triangulo
-                fou_left  = (b1 - a) * 0.4        #Calcula a mancha da esquerda e direita e pega a menor para valer para os dois
+                'FOU'
+                fou_right = (c - b2) * 0.4       
+                fou_left  = (b1 - a) * 0.4        
                 
-                nome = 'A%d'%x  #manda junto o nome do set para usar se precisar
+                nome = 'A%d'%x  
                 dict_sets['A%d' %x] = FuzzySet(self.domain,
                                                trapezoid_mf, [a, b1, b2, c, 1],
                                                trapezoid_mf, [a+fou_left, b1, b2, c-fou_right, 0.9],
                                                nome = nome)
 
         if mf_type == 'gaussian':
+            
+            'Standard Deviation'
             stdv = self.intervalo_entre_set / 3
             
-            'Descobre o centroide de cada conjunto'
+            'Finds the centroid of each set'
             centroides = []
             for x in range(1,self.numero_de_sets+1):
                 centroides.append(self.dominio_inf + (self.intervalo_entre_set*x))
@@ -2377,52 +2373,50 @@ class Type2Model():
     
     def generate_uneven_length_mfs(self,numero_de_sets,mf_type,mf_params): 
         """ 
-        Cria os conjuntos fuzzy SOBREPOSTOS recebendo parametros da função DE PERTINENCIA
+              
+        Create the overlapping fuzzy sets of uneven length
         
-        :mf_params: Lista contendo os parâmetros da função de pertinência a ser utilizada
         """
         
-        'configurações inciais'
         Type2Model.config_inicial(self,self.training_data,numero_de_sets)
         
                                         
-        dict_sets = {}   #Dicionário contendo os sets
+        dict_sets = {}   
         
-        'Constroi cada set a medida que avança na lista de intervalos de conjuntos'
+
         if mf_type=='triangular':
             for x in range(1,self.numero_de_sets+1):
                 r,t,y = mf_params[x-1]
-                b_esq = r        #Base esquerda
-                topo_tri = t     #Topo do triangulo
+                b_esq = r        #Left endpoint
+                topo_tri = t     #Top of triangle
                 b_dir = y  
                 
                 #print(b_esq,topo_tri,b_dir)
                 
-                fou_right = (b_dir-topo_tri)*0.4        #A mancha nao pode ser maior dos que os vertices do triangulo
-                fou_left = (topo_tri-b_esq)*0.4        #Calcula a mancha da esquerda e direita e pega a menor para valer para os dois
+                fou_right = (b_dir-topo_tri)*0.4       
+                fou_left = (topo_tri-b_esq)*0.4     
                 #fou = min(fou_left,fou_right)
                 
-                nome = 'A%d'%x  #manda junto o nome do set para usar se precisar
+                nome = 'A%d'%x 
                 dict_sets['A%d' %x] = FuzzySet(self.domain, tri_mf, [b_esq, topo_tri, b_dir, 1],tri_mf, [b_esq+fou_left, topo_tri, b_dir-fou_right, 0.9],nome = nome)
         
         elif mf_type=='trapezoidal':
             for x in range(1,self.numero_de_sets+1):
                 a,b1,b2,c = mf_params[x-1]
                  
-                fou_right = (c-b2)*0.6       #A mancha nao pode ser maior dos que os vertices do triangulo
-                fou_left = (b1-a)*0.6        #Calcula a mancha da esquerda e direita e pega a menor para valer para os dois
+                fou_right = (c-b2)*0.6     
+                fou_left = (b1-a)*0.6   
                 
                 #h = 1 - (fou_left/(b1-a))     #Utilizar caso queira a mancha com a mesma inclinação do trapézio
                 
                 h = 0.9         #h*(b1-a))+a+fou_left, h*(c-b2))+c-fou_right
                 
-                nome = 'A%d'%x  #manda junto o nome do set para usar se precisar
+                nome = 'A%d'%x 
                 dict_sets['A%d' %x] = FuzzySet(self.domain, trapezoid_mf, [a, b1, b2, c, 1],trapezoid_mf, [a+fou_left, b1, b2, c-fou_right, h],nome = nome)
         
         else:
-            print('Função de pertinencia não implementada')
+            print('Membership function not implemented')
         
-        #print(dict_sets)
         self.dict_sets = dict_sets
         
         
@@ -2432,7 +2426,6 @@ class Type2Model():
         """ 
         Cria os conjuntos fuzzy SEQUENCIAIS
         
-        :data: dados da serie temporal analisada
         """
         
         'configurações inciais'
@@ -2469,15 +2462,14 @@ class Type2Model():
     
     def training(self):      
         """
-        Fuzzyfica os valores da serie de treino para encontrar os conjuntos fuzzy correspondentes
-        a cada um deles.  Pode ser usada para conjuntos sobrepostos e sequenciais
         
-        Parametros:
-        :dict_sets: dictionary containing all the sets created
-        :order: order of the model ( n-th order)
-        treino - list of values to be trained
+        Fuzzifies the values from the training series to find the fuzzy sets corresponding to 
+        each one of them. Can be used for overlapping and sequential sets
+        
             
         Return
+        
+        Number of FLRs and FLRGs
         
         :lista_regras: List containing the rules for the model according to its order
             For order = 1, lista_regras = (antec,conseq)
@@ -2496,58 +2488,58 @@ class Type2Model():
         treino = self.training_data
         order = self.order
 
-        pert_val = []        #lista com valores de pertinencia superior e inferior de cada valor de treinamento
-        conj_ativados = []  #lista sem valores de pertinencia
+        pert_val = []        #list with upper and lower membership values for each training value
+        conj_ativados = []  #list without membership values
         dict_conj = {}
         
-        amostra = 1 #representa a amostra  que esta sendo analisada do TAIEX (data de analise M/D/ANO)
+        amostra = 1 #represents the sample being analyzed from the time series (analysis date M/D/YEAR)
         
-        'alpha-cut é o valor minimo de pertinencia que um valor de treinamento deve ter para ser considerado'
-        'como uma regra. Deve-se escolher pois se for zero, podemos ter regras insignificantes sendo adicionadas, gerando ruido'
+        'alpha-cut is the minimum membership value that a training value must have to be considered'
+        'as a rule. It must be chosen because if it is zero, we may have insignificant rules being added, generating noise'
         
         alpha_cut = 0.1
         ultimo = list(self.dict_sets.values())
-        ultimo = ultimo[-1]   #Ultimo conjunto da lista de conjuntos
+        ultimo = ultimo[-1]   #Last set of the fuzzy sets list
     
-        'Objetivo aqui é descobrir quais conjuntos foram ativados a cada valor de treinamento'
-        for x in treino:   #itera sobre todos os valores de treinamento
+        'Purpose here is to find out which sets were activated at each training value'
+        for x in treino:   #Iterate over all training values
             conj = 1
             conj_aux = []
             pert_val.append(amostra)
             pert_val.append(x)
             conj_temp = []
-            for it2fs in self.dict_sets.values():                         #itera sobre todos os sets
+            for it2fs in self.dict_sets.values():                         #Iterate over all sets
                 try:
                     u = it2fs.umf(x, it2fs.umf_params)  
                 except Exception as ex:
                     print("Valor de entrada: ", x)
                     print("Parâmetros", it2fs.umf_params)
                     
-                #u = it2fs.umf(x, it2fs.umf_params)     #calcula pertinencia do valor x na func. pert. superior
-                l = it2fs.lmf(x, it2fs.lmf_params)     #calcula pertinencia do valor x na func. pert. inferior               
-                if u >= alpha_cut:                           #pertinencia = 0 : nao toca o set  
-                    conj_temp.append(conj)            #conjunto sendo ativado eh adicionado a lista temporaria
+                #u = it2fs.umf(x, it2fs.umf_params)     #calculates membership of the x value in UMF
+                l = it2fs.lmf(x, it2fs.lmf_params)     #calculates membership of the x value IN LMF             
+                if u >= alpha_cut:                           #MEMBERSHIP = 0 : does not touch the set
+                    conj_temp.append(conj)            #activated sets add added to temporary list
                     conj_aux.append(conj)
-                    tuple_aux = [str('A%d'%conj),u,l]    #para cada valor de treino(x) tem os seguintes valores: [conjunto,pert.sup.,pert.inf.]
+                    tuple_aux = [str('A%d'%conj),u,l]    #for each training value (x) we have the info: [set,UMF memb.,UMF memb.]
                     pert_val.append(tuple_aux)
-                elif u > 0.0:                                 #Se for o ultimo conjunto, define este como o ativado ( o ultimo conjunto possui uma parte que nao é sobreposta)
+                elif u > 0.0:                                 #If it is the last set, set it as the activated one (the last set has a non-overlapping part)
                     if it2fs == ultimo:
                         conj_temp.append(conj)
-                conj = conj+1                             #Faz rodar por todos os conjuntos existentes
-            conj_ativados.append(conj_temp)                   #Adiciona a lista a uma lista de lista contendo conjuntos ativados a cada valor de treino
-            pert_val.append('f')                            #Utilizando 'f' para indicar a passagem de um valor de treino para outro
+                conj = conj+1                             #Run for all sets
+            conj_ativados.append(conj_temp)                   #Adds the list to a list containing sets activated at each training value
+            pert_val.append('f')                            #Using 'f' to indicate moving from one training value to another
             dict_conj['%d'%amostra] = conj_aux
-            amostra = amostra +1     #atualiza a amostra 
+            amostra = amostra +1     #Updates the sample
                         
 
-        'conj_ativados: mostra os conj. ativados a cada valor de treinamento'
+        'conj_ativados: shows the sets activated for each training value'
         
         associations = conj_ativados
         
         lista_regras = []
        
-        'Agora precisamos analisar e pegar os valores de conjuntos ativados para cada valor de x'
-        'Dependendo da ordem de sistema escolhida: Ex. ordem= 2 ->  f(t-1)+f(t) -> f(t+1)'
+        'Now we need to get the activated set values for each value of x'
+        'Depends on the order: Ex. order= 2 ->  f(t-1)+f(t) -> f(t+1)'
         for i in range(order-1, len(associations)-1):             #Começa no n° de ordem porque se for antes nao tem como pegar valores anteriores
             relations = []
             for x in range(order-1,-1,-1):    # Vai de ordem até 0, de 1 em 1
@@ -2564,7 +2556,7 @@ class Type2Model():
         self.number_rules = len(lista_regras)
         
         
-        'Adiciona a lista de regras ao modelo'
+        'Adds the list of rules to the model'
         
         for regra in lista_regras:
             
@@ -2650,21 +2642,19 @@ class Type2Model():
                     flrg[ant3,ant2,ant1] = [cons]    #If it does not, we create the new FLRG
         
 
-        'Retorna o numero de fuzzy logical relationships - FLR and flr groups - FLRG'
+        'Retorn the number of fuzzy logical relationships - FLR and flr groups - FLRG'
         return len(lista_regras),len(flrg)
             
             
     def add_variables(self):
         
-        """Função que adiciona as variaveis de entrada e saida ao sistema 
-        fuzzy de acordo com a ordem do sistema.
+        """
+      
+        Adds input and output variables according to model order
         
-        O usuário final não precisa utilizar essa função. Ela já é chamada
-        automaticamente pela função 'predict'.
+        Final user does not use this function.
         """
         
-        
-        'Adiciona variaveis de entrada de acordo com a ordem do sistema'
         for x in range(1,self.order+1):
             self.add_input_variable("x%d"%x)
 
@@ -2674,27 +2664,28 @@ class Type2Model():
         
     def predict(self,teste_func):     
         """
-        Função de previsão. Avalia cada valor de teste e pode ser aplicada para n-th order
-        Funciona da seguinte forma: o for abaixo (do y) associa:
-            x1 - atual
-            x2 - anterior
-            x3 - anterior do anterior, etc.
+        Forecasting function. evaluates each test value and can be used for n-th order
+        Works like this: the for loop below (y for loop) associates:           
+    
+            x1 - actual
+            x2 - previous
+            x3 - previous previous, etc
         """
         
-        'Adiciona variaveis de entrada de acordo com a ordem do sistema'
+
         Type2Model.add_variables(self)
 
-        '-------------------------------------------- Fuzzyficar e fazer previsão -----------------------------------------'
+        '-------------------------------------------- Fuzzify and forecast -----------------------------------------'
                
-        inputs = {}   #Dicionário de entradas a serem treinadas
+        inputs = {}   
         previsao = []
         
-        'O loop comeca no item relativo a ordem do modelo (para ter instancias passadas para usar na previsao)'
+        'The loop starts at the item relative to the model order (to have past instances to use in the prediction)'
                     
         for x in range(self.order-1,len(teste_func)):
             #print('xxxxx',x,'',end = '')
             aux = x    
-            for y in range(1,self.order+1):   #Itera entre as entradas "x" dependendo da ordem
+            for y in range(1,self.order+1):   #Iterates over "x" entries depending on the order
                        
                 inputs["x%d"%y] = teste_func[aux]
                 #print(teste_func[aux])
@@ -2704,12 +2695,12 @@ class Type2Model():
             it2out, tr = Type2Model.evaluate(self,inputs, min_t_norm, max_s_norm, self.domain, algorithm="KM")
             res = crisp(tr["y1"])    #'Encontra o valor defuzificado' 
             
-            'Caso o conjunto ativado pela amostra nao tenha nenhuma regra, a previsao sera zero. Nesse caso usa a previsao naive (repete o ultimo valor)'
+            'If the set activated by the sample has no rules, the prediction will be zero. In this case use the naive prediction (repeat the last value)'
             if(res == 0.0):     
                 res = teste_func[x-1]
                 #print("Previsao naive - x:",x,"teste:",teste_func[x],"teste_func:",teste_func[x-1],"res:",res)
             
-            previsao.append(res) #'preenche o vetor previsao com o novo valor defuzificado' 
+            previsao.append(res) #'Fills the final list with the forecast value' 
                     
         return previsao
 
@@ -3327,35 +3318,37 @@ class Type2Model():
         
         '--------------------------------'
         """
-        Nós vamos iterar somente sobre as regras ativadas, e não mais sobre TODAS as regras, 
-        como acontecia antes. Para isso vamos fuzzificar os valores e ver quais conjuntos sao ativados,
-        depois veremos quais regras conte´m esses conjuntos ativados
+
+        
+        We're only going to iterate over the activated rules, not ALL the rules anymore,
+        as happened before. For this we will fuzzify the values and see which sets are activated,
+        later we'll see which rules contain these activated sets
         
         :pert_val: List with the following structure for each value of the time series: (sample,value,sets_activated (upper membership)(lower membeship))
         :dict_conj: dictionary where the keys are the variables (x1,x2...) and the values are the activated sets
-        ativados: mostra OS CONJUNTOS ativados pelo(s) valor(es) de teste
+        ativados: shows fuzzy sets activated by test values
         
         """
         
-        "Primeiramente vamos analisar quais os conjuntos sao ativados pelo(s) valor(es) de teste"
+        "First let's look at which sets are activated by the test value(s)"
         pert_val = []        #lista com valores de pertinencia superior e inferior de cada valor de treinamento
         conj_ativados = []  #lista sem valores de pertinencia
         dict_conj = {}
         
         amostra = 1 #representa a amostra  que esta sendo analisada do TAIEX (data de analise M/D/ANO)
         
-        'alpha-cut é o valor minimo de pertinencia que um valor de treinamento deve ter para ser considerado'
-        'como uma regra. Deve-se escolher pois se for zero, podemos ter regras insignificantes sendo adicionadas, gerando ruido'
+        'alpha-cut is the minimum membership value that a value must have to be considered'
+        'as a rule. It must be chosen because if it is zero, we may have insignificant rules being added, generating noise'
         
         alpha_cut = 0.00001
         ultimo = list(self.dict_sets.values())
-        ultimo = ultimo[-1]   #Ultimo conjunto da lista de conjuntos
+        ultimo = ultimo[-1]   
         
         ativados = []
         
-        'Objetivo aqui é descobrir quais conjuntos foram ativados a cada valor de teste'
+        'Aim here is to find out which sets were activated at each test value'
 
-        for x in inputs.keys():   #itera sobre todos os valores de treinamento
+        for x in inputs.keys():   #Iterate over all sets
             conj = 1
             conj_aux = []
             pert_val.append(amostra)
@@ -3368,42 +3361,42 @@ class Type2Model():
                 except Exception as ex:
                     print("Valor de entrada: ", inputs[x])
                     print("Parâmetros", it2fs.umf_params)                    
-                l = it2fs.lmf(inputs[x], it2fs.lmf_params)     #calcula pertinencia do valor x na func. pert. inferior               
-                if u >= alpha_cut:                           #pertinencia = 0 : nao toca o set  
-                    conj_temp.append(conj)            #conjunto sendo ativado eh adicionado a lista temporaria
+                l = it2fs.lmf(inputs[x], it2fs.lmf_params)     #calculates membership of the x value in LMF               
+                if u >= alpha_cut:                           #MEMBERSHIP = 0 : does not touch the set 
+                    conj_temp.append(conj)            #activated sets add added to temporary list
                     sets.append(it2fs)
                     conj_aux.append(conj)
-                    tuple_aux = [str('A%d'%conj),u,l]    #para cada valor de treino(x) tem os seguintes valores: [conjunto,pert.sup.,pert.inf.]
+                    tuple_aux = [str('A%d'%conj),u,l]    #for each training value (x) we have the info: [set,UMF memb.,UMF memb.]
                     pert_val.append(tuple_aux)
-                elif u > 0.0:                                 #Se for o ultimo conjunto, define este como o ativado ( o ultimo conjunto possui uma parte que nao é sobreposta)
+                elif u > 0.0:                                 #If it is the last set, set it as the activated one (the last set has a non-overlapping part)
                     if it2fs == ultimo:
                         conj_temp.append(conj)
-                conj = conj+1                             #Faz rodar por todos os conjuntos existentes
-            conj_ativados.append(conj_temp)                   #Adiciona a lista a uma lista de lista contendo conjuntos ativados a cada valor de treino
+                conj = conj+1                             #Run for all sets
+            conj_ativados.append(conj_temp)                   #Adds the list to a list containing sets activated at each training value
             ativados.append(sets)
-            pert_val.append('f')                            #Utilizando 'f' para indicar a passagem de um valor de treino para outro
+            pert_val.append('f')                            #Using 'f' to indicate moving from one training value to another
             dict_conj[x] = conj_aux
-            amostra = amostra +1     #atualiza a amostra 
+            amostra = amostra +1     #Updates the sample
         
-        'conj_ativados: mostra os números dos conj. ativados pelo(s) valor(es) de teste'
-        'ativados: mostra OS CONJUNTOS ativados pelo(s) valor(es) de teste'
+        'conj_ativados: shows the NUMBERS OF SETS activated for each test value'
+        'ativados: shows fuzzy SETS activated by test values'
         
-        "Agora vamos ver quais regras são ativadas por estes conjuntos ativadas"
+        "Now let's see which rules are activated by these activated sets"
         regras_ativadas = []      
         
 
         if self.order == 1:
             
-            'A cada regra, verifica se o seu antecedente é um dos conjuntos ativados - MAIS RÁPIDA'
+            'At each rule, check if ITS antecedent is one of the activated sets - FASTEST WAY'
          
-            for rule in self.rules: #pega uma regra de cada vez da lista de regras BOAA
-               for antec in rule[0]: #pega somente os antecedentes da regra analisada
+            for rule in self.rules:             #take one rule at a time from the list of rules
+               for antec in rule[0]:            #takes only the antecedents of the analyzed rule
                    if antec[1] in ativados[0]:
                        regras_ativadas.append(rule)
                        
         """             
-           'Outra forma de fazer isso:'
-           'A cada conjunto ativado, verifica se há regras em que o antecedente seja esse conjunto - MAIS LENTA'
+           'Another way:'
+           'At each activated set, it checks if there are rules where the antecedent is this set - SLOWER WAY'
                    
             for fuzzyset in ativados[0]:
                 for rule in self.rules: #pega uma regra de cada vez da lista de regras
@@ -3415,28 +3408,28 @@ class Type2Model():
                        
         if self.order == 2:
             
-            'A estrutura de ativados é: [[A2,A3],[A7,A6]]. Faremos a distributiva para ver todas as possibilidades'
-            associations = list(product(*ativados))  #faz a distributiva entre os valores
+            'The structure of ativados is: [[A2,A3],[A7,A6]]. We will do the distributive to see all the possibilities'
+            associations = list(product(*ativados))  #does the distributive
 
-            'A cada regra, verifica se os seus antecedentes são um dos conjuntos ativados'
+            'At each rule, check if ITS antecedent is one of the activated sets'
 
-            for rule in self.rules: #pega uma regra de cada vez da lista de regras BOAA
-               antec = rule[0] #pega somente os antecedentes da regra analisada
-               for sets_ativ in associations:      #Itera sobre todos is sets ativados para ver se a regra bate        
+            for rule in self.rules: 
+               antec = rule[0] 
+               for sets_ativ in associations:      #Iterates over all activated is sets to see if the rule matches      
                    if antec[0][1] == sets_ativ[0] and antec[1][1] == sets_ativ[1]:
                        regras_ativadas.append(rule)
                        
                        
         if self.order == 3:
             
-            'A estrutura de ativados é: [[A2,A3,A6],[A7,A6,A8]]. Faremos a distributiva para ver todas as possibilidades'
+            'The structure of ativados is: [[A2,A3,A6],[A7,A6,A8]].We will do the distributive to see all the possibilities'
             associations = list(product(*ativados))  #faz a distributiva entre os valores
 
-            'A cada regra, verifica se os seus antecedentes são um dos conjuntos ativados'
+            'At each rule, check if ITS antecedent is one of the activated sets'
 
-            for rule in self.rules: #pega uma regra de cada vez da lista de regras BOAA
-               antec = rule[0] #pega somente os antecedentes da regra analisada
-               for sets_ativ in associations:      #Itera sobre todos is sets ativados para ver se a regra bate        
+            for rule in self.rules: 
+               antec = rule[0] 
+               for sets_ativ in associations:             
                    if antec[0][1] == sets_ativ[0] and antec[1][1] == sets_ativ[1] and antec[2][1] == sets_ativ[2]:
                        regras_ativadas.append(rule)
             

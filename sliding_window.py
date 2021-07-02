@@ -305,10 +305,10 @@ def run_sliding_window(datasets,dataset_names,diff,partition_parameters,orders,p
             
                 'Defines the name of the final file'
                 if diff == 0:  
-                    name_file = method_part + "_semdiff_" + data_name + "_" + mf_type + "_" + str(partition_parameters[0]) + "a" + str(partitions[-1]) + ".xlsx"
+                    name_file = method_part + "_semdiff_" + data_name + "_" + mf_type + "_" + str(partition_parameters[0]) + "a" + str(partition_parameters[-1]) + ".xlsx"
                     
                 elif diff == 1:   
-                    name_file = method_part + "_diff_" + data_name + "_" + mf_type + "_" + str(partition_parameters[0]) + "a" + str(partitions[-1]) + ".xlsx"      
+                    name_file = method_part + "_diff_" + data_name + "_" + mf_type + "_" + str(partition_parameters[0]) + "a" + str(partition_parameters[-1]) + ".xlsx"      
                        
                 
                 print("Saved file:",name_file)

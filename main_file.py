@@ -49,18 +49,19 @@ taiex = taiex.to_numpy()
 
 
 datasets = [taiex]
-dataset_names = ['NASDAQ']
-diff = 1                                   #Se diff = 1, diferencia os dados. Se diff = 0, não diferencia
-partitions = np.arange(6,7)                 #particoes deve ser uma lista
+dataset_names = ['taiex']
+diff = 1                                #If diff = 1, data is differentiated
+partition_parameters = np.arange(1,11)            #partiions must be a list
 orders = [1]
-partitioners = ['SODA']            #partitioners: 'chen' 'SODA' 'ADP' 'DBSCAN' 'CMEANS' 'entropy' 'FCM'  
-mfs = ['triangular']         #mfs: 'triangular' ou 'trapezoidal' ou 'gaussian'
+partitioners = ['SODA']                 #partitioners: 'chen' 'SODA' 'ADP' 'DBSCAN' 'CMEANS' 'entropy' 'FCM'  
+mfs = ['triangular']                    #mfs: 'triangular' ou 'trapezoidal' ou 'gaussian'
+
 
 '------------------------------------------------ Running the model -------------------------------------------------'
 
 
 'Builds and runs the model'
-run_sliding_window(datasets,dataset_names,diff,partitions,orders,partitioners,mfs)
+run_sliding_window(datasets,dataset_names,diff,partition_parameters,orders,partitioners,mfs)
 
 
 

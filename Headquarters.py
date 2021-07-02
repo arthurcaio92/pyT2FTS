@@ -22,7 +22,7 @@ def T2FTS(data,method_part,mf_type,partition_parameters,order,diff):
     '------------------------------------------------ Setup ------------------------------------------'
     
     'Training takes 80% of the data'
-    training_interval = int(0.9 * len(data))         
+    training_interval = int(0.8 * len(data))         
      
     training_data = data[:training_interval]
   

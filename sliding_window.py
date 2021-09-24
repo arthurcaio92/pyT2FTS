@@ -6,7 +6,7 @@ import pickle #To save the data as the process goes
 import time
 
     
-def run_sliding_window(datasets,dataset_names,diff,partition_parameters,orders,partitioners,mfs):
+def run_sliding_window(datasets,dataset_names,diff,partition_parameters,orders,partitioners,mfs,training):
     
     """
     
@@ -133,7 +133,7 @@ def run_sliding_window(datasets,dataset_names,diff,partition_parameters,orders,p
                             order = lag
                             
                                             
-                            lista_erros,n_sets,FLR,FLRG = T2FTS(dados,method_part,mf_type,part_param,order=order,diff=diff)
+                            lista_erros,n_sets,FLR,FLRG = T2FTS(dados,method_part,mf_type,part_param,order=order,diff=diff,training=training)
                            
                             print("---------------------------------")
                                

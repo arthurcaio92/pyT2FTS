@@ -17,18 +17,25 @@ import numpy as np
     
 """
     
-def T2FTS(data,method_part,mf_type,partition_parameters,order,diff):
+def T2FTS(data,method_part,mf_type,partition_parameters,order,diff,training):
         
     '------------------------------------------------ Setup ------------------------------------------'
+
     
-    'Training takes 80% of the data'
-    training_interval = int(0.8 * len(data))         
-     
-    training_data = data[:training_interval]
-  
-    'Testing takes the remaining 20%'
-    test_data = data[training_interval:]
-          
+    if training == 1:   #(INFO PERFEITA)
+        training_data = data
+        test_data = data
+    else:
+   
+        'Training takes % of the data'
+        training_interval = int(training * len(data))     
+
+        training_data = data[:training_interval]
+      
+        'Testing takes the remaining 20%'
+        test_data = data[training_interval:]
+        
+       
     'Checks if the data must be differentiated'
     if diff == True:
         training_data_orig = training_data
@@ -37,6 +44,7 @@ def T2FTS(data,method_part,mf_type,partition_parameters,order,diff):
         tdiff = Differential(1) 
         training_data = tdiff.apply(training_data_orig)
         test_data = tdiff.apply(test_data_orig)
+        
     
     'Create an object of the class Type2Model'
     modelo = Type2Model(training_data,order) 
@@ -125,7 +133,11 @@ def T2FTS(data,method_part,mf_type,partition_parameters,order,diff):
     'Plots forecast graph data x forecast'      
     #plot_forecast(test_data,forecast_result)
     
-    
+    #print(test_data)
+    #print(forecast_result)
+
     return error_list,number_of_sets,FLR,FLRG
-    
-    
+
+
+
+

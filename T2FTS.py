@@ -1023,13 +1023,13 @@ def IT2FS_plot(*sets, title=None, legends=None, filename=None):
         centroids.append(it2fs.umf_params[1])
         centroids_names.append(str(int(it2fs.umf_params[1])) + '\n' + it2fs.nome)
     if title is not None:
-        ax.set_title(title,fontsize=25)
-    ax.set_xlabel("Universe of Discourse",fontsize=25)
-    ax.set_ylabel("Membership Degree",fontsize=25)
+        ax.set_title(title,fontsize=35)
+    ax.set_xlabel("Universe of Discourse",fontsize=35)
+    ax.set_ylabel("Membership Degree",fontsize=35)
     ax.set_xticks(centroids)
     ax.set_xticklabels(centroids_names)
-    ax.xaxis.set_tick_params(labelsize=20)
-    ax.yaxis.set_tick_params(labelsize=20)
+    ax.xaxis.set_tick_params(labelsize=30)
+    ax.yaxis.set_tick_params(labelsize=30)
     ax.grid(False)
     plt.show()
     

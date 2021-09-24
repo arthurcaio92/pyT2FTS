@@ -79,7 +79,7 @@ def get_SP500():
 def get_Brent_Oil():
     """
     Get the complete multivariate time series data.
-
+    
     :return: Pandas DataFrame
     """
     dat = get_dataframe('Brent-Oil.csv.zip',
@@ -87,10 +87,13 @@ def get_Brent_Oil():
                                sep=",", compression='zip')
     #dat["Date"] = pd.to_datetime(dat["Date"])
     
-    dat_4000 = dat[4554:]  #Slices from 2001 for 4000 instances 
-    dat_5000 = dat[3554:]  #Slices from 2001 for 5000 instances 
+    dat_4000 = dat[4554:]  #Slices for 4000 instances 
+    dat_5000 = dat[3554:]  #Slices for 5000 instances 
+    dat_2000 = dat[6752:8538]  #Slices from 02/01/14 to 31/12/2020 for 5000 instances 
+    dat_16 = dat[7261:8538]  #Slices from 04/01/16 to 31/12/2020 for 5000 instances 
     
-    return dat_4000
+    
+    return dat_16
 
 
 

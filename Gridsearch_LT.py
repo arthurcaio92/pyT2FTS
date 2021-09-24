@@ -38,6 +38,11 @@ def run_Gridsearch(datasets,dataset_names,diff,partition_parameters,orders,parti
     'Auxiliar variable to know the name of the data set'
     name_index = 0
     
+    
+    
+    melhor_modelo = {'RMSE':100000,
+                     'Modelo':'aaaa'}
+    
     for data in datasets:
         
         data_name = dataset_names[name_index]
@@ -102,8 +107,9 @@ def run_Gridsearch(datasets,dataset_names,diff,partition_parameters,orders,parti
                         order = lag
                         
                                         
-                        lista_erros,n_sets,FLR,FLRG = T2FTS(data,method_part,mf_type,part_param,order=order,diff=diff,training=training)
+                        lista_erros,n_sets,FLR,FLRG,modelo = T2FTS(data,method_part,mf_type,part_param,order=order,diff=diff,training=training)
                        
+
                         print("---------------------------------")
                            
                         '------------------------------------------------  Error Metrics  ------------------------------------------'
@@ -111,6 +117,11 @@ def run_Gridsearch(datasets,dataset_names,diff,partition_parameters,orders,parti
                         rmse = lista_erros[3]
                         mape = lista_erros[1]
                         mae = lista_erros[4]
+                        
+                        if rmse < melhor_modelo['RMSE']:
+                            melhor_modelo['RMSE'] = rmse
+                            melhor_modelo['Modelo'] = modelo
+                        
                         
                         'Adds the number of rules to the respective list'
                         lista_rules.append(FLR)
@@ -215,7 +226,7 @@ def run_Gridsearch(datasets,dataset_names,diff,partition_parameters,orders,parti
                 
     df_specific = pd.DataFrame(data=specific_errors)
     df_spec = df_specific.sort_values(["RMSE"])
-    return df_spec
+    return melhor_modelo
                 
                 
              

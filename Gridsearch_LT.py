@@ -41,6 +41,7 @@ def run_Gridsearch(datasets,dataset_names,diff,partition_parameters,orders,parti
     
     
     melhor_modelo = {'RMSE':100000,
+                     'Gridsize':50,
                      'Modelo':'aaaa'}
     
     for data in datasets:
@@ -120,6 +121,7 @@ def run_Gridsearch(datasets,dataset_names,diff,partition_parameters,orders,parti
                         
                         if rmse < melhor_modelo['RMSE']:
                             melhor_modelo['RMSE'] = rmse
+                            melhor_modelo['Gridsize'] = part_param
                             melhor_modelo['Modelo'] = modelo
                         
                         

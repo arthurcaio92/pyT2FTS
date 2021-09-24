@@ -189,9 +189,9 @@ datasets = [brent_oil]
 dataset_names = ['Brent']
 diff = 1                                #If diff = 1, data is differentiated
 partition_parameters = np.arange(1,3)            #partiions must be a list
-orders = [1,2,3]
-partitioners = ['ADP']                 #partitioners: 'chen' 'SODA' 'ADP' 'DBSCAN' 'CMEANS' 'entropy' 'FCM'  
-mfs = ['triangular','trapezoidal','gaussian']                    #mfs: 'triangular' ou 'trapezoidal' ou 'gaussian'
+orders = [1]
+partitioners = ['SODA']                 #partitioners: 'chen' 'SODA' 'ADP' 'DBSCAN' 'CMEANS' 'entropy' 'FCM'  
+mfs = ['triangular']                    #mfs: 'triangular' ou 'trapezoidal' ou 'gaussian'
 
 
 '------------------------------------------------ Running the model -------------------------------------------------'

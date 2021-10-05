@@ -4,6 +4,7 @@ from pyT2FTS.Tools import error_metrics,plot_forecast
 from pyT2FTS.Partitioners import SODA_part,ADP_part,DBSCAN_part,FCM_part,ENTROPY_part,CMEANS_part,HUARNG_part
 from pyT2FTS.Transformations import Differential
 import numpy as np
+import pandas as pd
 
 
 """
@@ -20,7 +21,23 @@ import numpy as np
 def T2FTS(data,method_part,mf_type,partition_parameters,order,diff,training):
         
     '------------------------------------------------ Setup ------------------------------------------'
-
+   
+    """
+    'codigo para rodar TAIEX POR ANO'
+    'Separa por mes'
+    g = data.groupby(pd.Grouper(key='Date', freq='M'))
+    taiex_df_mes = [group for _,group in g]
+    
+    treino = taiex_df_mes[:10]
+    teste = taiex_df_mes[10:]
+    
+    treino_df = pd.concat(treino)
+    teste_df = pd.concat(teste)
+    
+    training_data = treino_df.Close.to_numpy() 
+    test_data = teste_df.Close.to_numpy()   
+    
+    """
     
     if training == 1:   #(INFO PERFEITA)
         training_data = data
@@ -34,6 +51,7 @@ def T2FTS(data,method_part,mf_type,partition_parameters,order,diff,training):
       
         'Testing takes the remaining 20%'
         test_data = data[training_interval:]
+    
         
        
     'Checks if the data must be differentiated'
@@ -99,8 +117,8 @@ def T2FTS(data,method_part,mf_type,partition_parameters,order,diff,training):
         
         
     #Plot partition graphs
-    #plot_title = str(number_of_sets) + ' partitions'
-    #IT2FS_plot(*modelo.dict_sets.values(),title= plot_title)
+    plot_title = str(number_of_sets) + ' partitions'
+    IT2FS_plot(*modelo.dict_sets.values(),title= plot_title)
     
     '------------------------------------------------ Training  ------------------------------------------'
         
@@ -131,10 +149,20 @@ def T2FTS(data,method_part,mf_type,partition_parameters,order,diff,training):
     error_list = error_metrics(test_data,forecast_result)
         
     'Plots forecast graph data x forecast'      
-    #plot_forecast(test_data,forecast_result)
+    plot_forecast(test_data,forecast_result)
     
     #print(test_data)
     #print(forecast_result)
+    
+    """
+    para gerar grafico ADP-T2FTS com previsao de outros modelos
+    name_file = "previsao_soda" + ".xlsx"      
+    import pandas as pd
+    writer = pd.ExcelWriter(name_file, engine='xlsxwriter')          
+    fre = pd.Series(forecast_result)
+    fre.to_excel(writer, sheet_name='General errors',index = False)
+    writer.save()
+    """           
 
     return error_list,number_of_sets,FLR,FLRG
 

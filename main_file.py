@@ -174,7 +174,6 @@ klang = klang.to_numpy()
 klang[:731]
 
 
-
 klang_df = pd.read_csv('kalang.csv')
 klang = klang_df['value']
 klang = klang.to_numpy()
@@ -184,18 +183,25 @@ df_brent_oil = get_Brent_Oil()
 brent_oil = df_brent_oil.Price  
 brent_oil = brent_oil.to_numpy()
 
+"""
+plt.figure(figsize = (8,4))
+plt.plot(brent_oil)
+plt.xlabel("Samples")
+plt.ylabel("Brent Oil Prices (US$/Barrel)")
+"""
+
 
 datasets = [brent_oil]
-dataset_names = ['Brent']
+dataset_names = ['brent_oil']
 diff = 1                                #If diff = 1, data is differentiated
-partition_parameters = np.arange(1,11)            #partiions must be a list
-orders = [1,2,3]
+partition_parameters = np.arange(1,2)            #partiions must be a list
+orders = [1]
 partitioners = ['ADP']                 #partitioners: 'chen' 'SODA' 'ADP' 'DBSCAN' 'CMEANS' 'entropy' 'FCM'  
-mfs = ['triangular','trapezoidal','gaussian']                    #mfs: 'triangular' ou 'trapezoidal' ou 'gaussian'
+mfs = ['triangular']                    #mfs: 'triangular' ou 'trapezoidal' ou 'gaussian'
 
 
 '------------------------------------------------ Running the model -------------------------------------------------'
 
 
 'Builds and runs the model'
-run_Gridsearch(datasets,dataset_names,diff,partition_parameters,orders,partitioners,mfs,training = 0.7)
+#run_Gridsearch(datasets,dataset_names,diff,partition_parameters,orders,partitioners,mfs,training = 0.7)

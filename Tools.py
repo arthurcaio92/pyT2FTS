@@ -232,7 +232,7 @@ def plot_forecast(teste_func,previsao):
     plt.figure()
     plt.figure(figsize=(20,10))
     x, = plt.plot(teste_func, label = "Série Original", color = 'b')
-    y, = plt.plot(previsao, label = "Previsão Fuzzy Tipo-2", color = 'r')
+    y, = plt.plot(previsao, label = "Previsão Fuzzy Tipo-2",dashes=[6, 3], color = 'r')
     #plt.xticks(np.arange(1970, 1993,1)) 
     plt.legend(handles=[x, y])
     plt.show()  

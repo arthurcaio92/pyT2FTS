@@ -113,6 +113,8 @@ def run_Gridsearch(datasets,dataset_names,diff,partition_parameters,orders,parti
                         mae = lista_erros[4]
                         
                         'Adds the number of rules to the respective list'
+                        #REGRAS = FLR
+                        #FLR = len(FLR)
                         lista_rules.append(FLR)
                         lista_flrg.append(FLRG)
                        
@@ -208,6 +210,8 @@ def run_Gridsearch(datasets,dataset_names,diff,partition_parameters,orders,parti
                 #Downloads the Excel file to computer
                 #from google.colab import files
                 #files.download(name_file)
+                
+                #return REGRAS
                 
                 
              

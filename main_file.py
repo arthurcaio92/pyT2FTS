@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 
 '------------------------------------------------ Data set import -------------------------------------------------'
-"""
+
 taiex_df = get_TAIEX()
 taiex = taiex_df.avg               
 taiex = taiex.to_numpy()  
@@ -25,6 +25,7 @@ df_brent_oil = get_Brent_Oil()
 brent_oil = df_brent_oil.Price  
 brent_oil = brent_oil.to_numpy()
 
+"""
 crude_oil_df = pd.read_excel('Crude-oil-prices.xls', sheet_name='Data 1')
 crude_oil_df = crude_oil_df['RWTC']
 crude_oil = crude_oil_df[1:].to_numpy()
@@ -36,38 +37,26 @@ for x in crude_oil:
     a.append(x)
     
 crude_oil  = np.array(a)
-
-    
-
-taiex_df = get_TAIEX()
-taiex = taiex_df.avg               
-taiex = taiex.to_numpy() 
-
-nasdaq_df = get_NASDAQ()
-nasdaq = nasdaq_df.avg               
-nasdaq = nasdaq.to_numpy()  
-
+"""
 
 '------------------------------------------------ Gridsearch Parameters -------------------------------------------------'
 
 
 datasets = [taiex]
-dataset_names = ['taiex']
-diff = 1                                #If diff = 1, data is differentiated
-partition_parameters = np.arange(1,11)            #partiions must be a list
+dataset_names = ['TAIEX']
+diff = 1                                         #If diff = 1, data is differentiated
+partition_parameters = np.arange(10,11)           #partiions must be a list
 orders = [1]
-partitioners = ['SODA']                 #partitioners: 'chen' 'SODA' 'ADP' 'DBSCAN' 'CMEANS' 'entropy' 'FCM'  
-mfs = ['triangular']                    #mfs: 'triangular' ou 'trapezoidal' ou 'gaussian'
+partitioners = ['SODA']                    #partitioners: 'chen' 'SODA' 'ADP' 'DBSCAN' 'CMEANS' 'entropy' 'FCM'  
+mfs = ['triangular']    #mfs: 'triangular' ou 'trapezoidal' ou 'gaussian'
 
 
 '------------------------------------------------ Running the model -------------------------------------------------'
 
-
-'Builds and runs the model'
 run_sliding_window(datasets,dataset_names,diff,partition_parameters,orders,partitioners,mfs,training = 0.8)
 
 
-"""
+
 
 
 
@@ -96,9 +85,6 @@ ano = enroll.Year
 enroll = enroll['Actual production (kg/ha)']
 enroll = enroll.to_numpy()
 
-taiex_df = get_TAIEX()
-taiex = taiex_df.avg               
-taiex = taiex.to_numpy()  
 
 '##### MELBOURNE TEMP #####'
 melb_temp_df = pd.read_excel('maximum-temp-melbourne.xlsx')
@@ -179,25 +165,20 @@ klang = klang_df['value']
 klang = klang.to_numpy()
 """
 
+
 df_brent_oil = get_Brent_Oil()
 brent_oil = df_brent_oil.Price  
 brent_oil = brent_oil.to_numpy()
-
-"""
-plt.figure(figsize = (8,4))
-plt.plot(brent_oil)
-plt.xlabel("Samples")
-plt.ylabel("Brent Oil Prices (US$/Barrel)")
-"""
+        
 
 
-datasets = [brent_oil]
-dataset_names = ['brent_oil']
-diff = 1                                #If diff = 1, data is differentiated
-partition_parameters = np.arange(1,2)            #partiions must be a list
-orders = [1]
-partitioners = ['ADP']                 #partitioners: 'chen' 'SODA' 'ADP' 'DBSCAN' 'CMEANS' 'entropy' 'FCM'  
-mfs = ['triangular']                    #mfs: 'triangular' ou 'trapezoidal' ou 'gaussian'
+datasets = [taiex,nasdaq]
+dataset_names = ['TAIEX','NASDAQ']
+diff = 1                                         #If diff = 1, data is differentiated
+partition_parameters = np.arange(1,11)           #partiions must be a list or array
+orders = [1,2,3]
+partitioners = ['ADP','SODA']                    #partitioners: 'chen' 'SODA' 'ADP' 'DBSCAN' 'CMEANS' 'entropy' 'FCM'  
+mfs = ['triangular','trapezoidal','gaussian']    #mfs: 'triangular' ou 'trapezoidal' ou 'gaussian'
 
 
 '------------------------------------------------ Running the model -------------------------------------------------'

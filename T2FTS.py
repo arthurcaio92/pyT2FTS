@@ -172,6 +172,23 @@ def tri_mf(x, params):
     """
     
     #print(params)
+    
+    """
+    EQUACAO DO FUZZY SET TRIANGULAR
+    
+    a - left end - params[0]
+    b - center - params[1]
+    c - right end - params[2]
+    x - variable
+    
+    a <= x <= b -> (x-a)/(b-a)
+    x = b       -> x = b
+    b <= x <= c -> (c-x)/(c-b)
+    
+    Minimum serve para assegurar que pertinencia nunca passe de 1
+    Maximum serve para assegurar que pertinencia nunca seja menor que 0
+    
+    """
 
     return minimum(1, maximum(0, ((params[3] * (x - params[0]) / (params[1] - params[0])) * (x <= params[1]) + \
                ((params[3] * ((params[2] - x) / (params[2] - params[1]))) * (x > params[1]))) ))
@@ -705,6 +722,36 @@ class FuzzySet(object):
         >>> mySet.plot(filename="mySet")
         """
         plt.figure()
+        
+        'Type-2'
+        """
+        x = [3]
+        y = [0.4]
+        plt.vlines(x, 0, y, linestyle="dashed",color = 'r')
+        plt.hlines(y, 0, x, linestyle="dashed",color = 'r')
+
+        x = [3]
+        y = [0.67]
+        
+        plt.vlines(x, 0, y, linestyle="dashed",color = 'r')
+        plt.hlines(y, 0, x, linestyle="dashed",color = 'r')
+        
+        'Type-1'
+        
+        x = [2]
+        y = [0.32]
+        plt.vlines(x, 0, y, linestyle="dashed",color = 'r')
+        plt.hlines(y, 0, x, linestyle="dashed",color = 'r')
+
+        x = [3]
+        y = [0.67]
+        
+        plt.vlines(x, 0, y, linestyle="dashed",color = 'r')
+        plt.hlines(y, 0, x, linestyle="dashed",color = 'r')
+        """
+        
+        dom = linspace(0., 1.,11)
+        
         plt.fill_between(self.domain, self.upper, self.lower)
         if legend_text is not None:
             plt.legend([legend_text])
@@ -712,13 +759,15 @@ class FuzzySet(object):
             plt.title(title)
         plt.plot(self.domain, self.upper, color="black")
         plt.plot(self.domain, self.lower, color="black")
-        plt.xticks(fontsize=18)
-        plt.yticks(fontsize=18)
-        plt.grid(True)
-        plt.xlabel("Universe of Discourse",fontsize=18)
-        plt.ylabel("Membership Degree",fontsize=18)
+        plt.xticks(fontsize=12)
+        plt.yticks(fontsize=12)
+        #plt.yticks(dom,fontsize=12)
+        #plt.grid(True)
+        plt.xlabel("Universe of Discourse",fontsize=14)
+        plt.ylabel("Membership Degree",fontsize=14)
         if filename is not None:
             plt.savefig(filename + ".pdf", format="pdf", dpi=300, bbox_inches="tight")
+                
         plt.show()
 
     def __neg__(self):
@@ -969,7 +1018,7 @@ def IT2FS_plot_OLD(*sets, title=None, legends=None, filename=None):
     plt.show()
     
     
-def IT2FS_plot(*sets, title=None, legends=None, filename=None):
+def IT2FS_plot(*sets, title=None, mf_shape = None, legends=None, filename=None):
     """
     Plots multiple IT2FSs together in the same figure.
     
@@ -1011,7 +1060,8 @@ def IT2FS_plot(*sets, title=None, legends=None, filename=None):
     centroids = [] #store mfs center points for ticks in x-axis
     centroids_names = []   #store  mfs names for x-axis ticks
     
-    fig, ax = plt.subplots(figsize=(25,5))  #it was 15,5
+    
+    fig, ax = plt.subplots(figsize=(30,5))  #it was 15,5
 
     for it2fs in sets:
         ax.fill_between(it2fs.domain, it2fs.upper, it2fs.lower,alpha=0.5)
@@ -1020,8 +1070,16 @@ def IT2FS_plot(*sets, title=None, legends=None, filename=None):
     for it2fs in sets:
         ax.plot(it2fs.domain, it2fs.lower, color="black")
         ax.plot(it2fs.domain, it2fs.upper, color="black")
-        centroids.append(it2fs.umf_params[1])
-        centroids_names.append(str(int(it2fs.umf_params[1])) + '\n' + it2fs.nome)
+        
+        if mf_shape == 'triangular':
+            centr = it2fs.umf_params[1]
+        if mf_shape == 'trapezoidal':
+            centr = it2fs.umf_params[1] + ((it2fs.umf_params[2] - it2fs.umf_params[1])/2)
+        if mf_shape == 'gaussian':
+            centr = it2fs.umf_params[0]     
+        #print(it2fs.nome,it2fs.umf_params) #printa as coordenadas de cada set
+        centroids.append(centr)
+        centroids_names.append(str(int(centr)) + '\n' + it2fs.nome)
     if title is not None:
         ax.set_title(title,fontsize=35)
     ax.set_xlabel("Universe of Discourse",fontsize=35)
@@ -1078,6 +1136,7 @@ def TR_plot(domain, tr, title=None, legend=None, filename=None):
     >>> TR_plot(linspace(0., 1., 100), tr1)
     """
     plt.figure()
+
     plt.plot([min(domain), tr[0], tr[0], tr[1], tr[1], max(domain)], 
               [0, 0, 1, 1, 0, 0], linewidth=2)
     plt.xlim((min(domain), max(domain)))
@@ -1090,6 +1149,12 @@ def TR_plot(domain, tr, title=None, legend=None, filename=None):
     plt.grid(True)
     if filename is not None:
         plt.savefig(filename + ".pdf", format="pdf", dpi=300, bbox_inches="tight")
+        
+    plt.xlabel("Universe of Discourse",fontsize=14)
+    plt.ylabel("Membership Degree",fontsize=14)
+    plt.xticks(fontsize=12)
+    plt.yticks(fontsize=12)
+    
     plt.show()
 
 def crisp(tr):
@@ -1282,6 +1347,9 @@ def meet(domain, it2fs1, it2fs2, t_norm):
     it2fs = FuzzySet(domain)
     it2fs.upper = t_norm(it2fs1.upper, it2fs2.upper)
     it2fs.lower = t_norm(it2fs1.lower, it2fs2.lower)
+    
+    'Plota o resultado da operação para cada set'
+    #it2fs.plot(title = it2fs2.nome)
     return it2fs
 
 
@@ -1738,6 +1806,8 @@ def EIASC_algorithm(intervals, params=None):
         R -= 1
         if (y_r >= intervals[R, 1]) or isclose(y_r, intervals[R, 1]):
             break  
+        
+    #print("Cl e Cr do EIASC:",y_l, y_r)
     return y_l, y_r
 
 
@@ -2278,7 +2348,7 @@ class Type2Model():
             self.domain = linspace(self.dominio_inf, self.dominio_sup, int(domain_length))
         else:
             self.domain = linspace(self.dominio_inf, self.dominio_sup, 1000)
-           
+                       
 
         self.numero_de_sets = n_sets
         
@@ -2346,7 +2416,7 @@ class Type2Model():
                 fou_right = (c - b2) * 0.4       
                 fou_left  = (b1 - a) * 0.4        
                 
-                nome = 'A%d'%x  
+                nome = 'Ã%d'%x  
                 dict_sets['A%d' %x] = FuzzySet(self.domain,
                                                trapezoid_mf, [a, b1, b2, c, 1],
                                                trapezoid_mf, [a+fou_left, b1, b2, c-fou_right, 0.9],
@@ -2362,7 +2432,7 @@ class Type2Model():
             for x in range(1,self.numero_de_sets+1):
                 centroides.append(self.dominio_inf + (self.intervalo_entre_set*x))
             
-                nome = 'A%d'%x
+                nome = 'Ã%d'%x
                 dict_sets['A%d' %x] = FuzzySet(self.domain, gaussian_mf, [centroides[x-1], stdv, 1], gaussian_mf, [centroides[x-1], stdv*0.50, 0.9], nome = nome)
     
                 
@@ -2692,7 +2762,9 @@ class Type2Model():
                 aux = aux-1
                 
 
-            it2out, tr = Type2Model.evaluate(self,inputs, min_t_norm, max_s_norm, self.domain, algorithm="KM")
+            it2out, tr = Type2Model.evaluate(self,inputs, min_t_norm, max_s_norm, self.domain, algorithm="EIASC")
+            #it2out["y1"].plot() #printa T2 agregado final
+            #TR_plot(self.domain, tr["y1"]) #printa T1 reduzido tipo
             res = crisp(tr["y1"])    #'Encontra o valor defuzificado' 
             
             'If the set activated by the sample has no rules, the prediction will be zero. In this case use the naive prediction (repeat the last value)'
@@ -3381,6 +3453,8 @@ class Type2Model():
         'conj_ativados: shows the NUMBERS OF SETS activated for each test value'
         'ativados: shows fuzzy SETS activated by test values'
         
+        #print(conj_ativados)
+        
         "Now let's see which rules are activated by these activated sets"
         regras_ativadas = []      
         
@@ -3393,7 +3467,14 @@ class Type2Model():
                for antec in rule[0]:            #takes only the antecedents of the analyzed rule
                    if antec[1] in ativados[0]:
                        regras_ativadas.append(rule)
-                       
+
+
+        'Printa regras'
+        #for x in regras_ativadas:      
+            #print(x[0][0][1], "->",x[1][0][1])
+
+            
+            
         """             
            'Another way:'
            'At each activated set, it checks if there are rules where the antecedent is this set - SLOWER WAY'
@@ -3447,9 +3528,13 @@ class Type2Model():
                 for input_statement in rule[0]:  #cada regra eh: [[(x1,antecedente)],[(y1,consequente)]] entao input_statement e uma lista de tuplas de antecedentes
                     u = t_norm(u, input_statement[1].umf(inputs[input_statement[0]], input_statement[1].umf_params)) #calcula a pertinencia de cada input no set da regra
                     l = t_norm(l, input_statement[1].lmf(inputs[input_statement[0]], input_statement[1].lmf_params))
+                    #print("pertinencia de",input_statement[1], " u ",u, " l ",l) #printa pertinencias de cada set antecedente das regras
+                    #print("pertinencia de",input_statement[1])
                 for consequent in rule[1]:
                     B_l = meet(domain, FuzzySet(domain, const_mf, [u], const_mf, [l]), consequent[1], t_norm)
                     B[consequent[0]].append(B_l)
+                    
+            #print('########')
   
             C = {out: FuzzySet(domain) for out in self.outputs}
             TR = {}
@@ -3457,8 +3542,8 @@ class Type2Model():
                 for B_l in B[out]:
                     C[out] = join(domain, C[out], B_l, s_norm)
                 TR[out] = Centroid(C[out], alg_func, domain, alg_params=algorithm_params)
-
             return C, TR
+        
         elif method == "CoSet":
             F = []
             G = {out: [] for out in self.outputs}

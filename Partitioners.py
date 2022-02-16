@@ -38,7 +38,8 @@ def ADP_part(data,gridsize, distancetype='chebyshev'):
     dados = DataFrame(data, columns = ['avg'])
     dados.insert(0, '#', range(1,len(dados)+1))
     
-    centre, idx = ADP(dados,gridsize)           
+    centre, idx = ADP(dados,gridsize)   
+    #centre, idx = ADP(dados)         #DEFAULT = 11
     
     'Define o numero de sets'
     numero_de_sets = len(centre)

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from pyT2FTS.T2FTS import Type2Model,IT2FS_plot
+from pyT2FTS.T2FTS import Type2Model,IT2FS_plot,IT2FS_plot_OLD
 from pyT2FTS.Tools import error_metrics,plot_forecast 
 from pyT2FTS.Partitioners import SODA_part,ADP_part,DBSCAN_part,FCM_part,ENTROPY_part,CMEANS_part,HUARNG_part
 from pyT2FTS.Transformations import Differential
@@ -51,7 +51,8 @@ def T2FTS(data,method_part,mf_type,partition_parameters,order,diff,training):
       
         'Testing takes the remaining 20%'
         test_data = data[training_interval:]
-    
+
+        
         
        
     'Checks if the data must be differentiated'
@@ -117,8 +118,8 @@ def T2FTS(data,method_part,mf_type,partition_parameters,order,diff,training):
         
         
     #Plot partition graphs
-    plot_title = str(number_of_sets) + ' partitions'
-    IT2FS_plot(*modelo.dict_sets.values(),title= plot_title)
+    #plot_title = str(number_of_sets) + ' partitions'
+    #IT2FS_plot(*modelo.dict_sets.values(),title= plot_title,mf_shape = mf_type)
     
     '------------------------------------------------ Training  ------------------------------------------'
         
@@ -133,6 +134,7 @@ def T2FTS(data,method_part,mf_type,partition_parameters,order,diff,training):
     print("Partitioner:",method_part,"| N. of sets:", number_of_sets, "| Order:", order)
     print("")
     forecast_result = modelo.predict(test_data)   
+    
 
     
     'Return values to original scale (i.e. undo the diff)'
@@ -146,13 +148,13 @@ def T2FTS(data,method_part,mf_type,partition_parameters,order,diff,training):
         forecast_result = forecast_result[:-1]
 
     '------------------------------------------------  Métricas de erro  ------------------------------------------'
+    
     error_list = error_metrics(test_data,forecast_result)
+
         
     'Plots forecast graph data x forecast'      
-    plot_forecast(test_data,forecast_result)
+    #plot_forecast(test_data,forecast_result)
     
-    #print(test_data)
-    #print(forecast_result)
     
     """
     para gerar grafico ADP-T2FTS com previsao de outros modelos
